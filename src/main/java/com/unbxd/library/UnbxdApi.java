@@ -60,6 +60,11 @@ public class UnbxdApi {
 		return this;
 	}
 
+	public UnbxdApi setField(String field) {
+		this.params.setFields(field);
+		return this;
+	}
+
 	public UnbxdApi setRuleSet(String ruleset) {
 		this.params.setRuleSet(ruleset);
 		return this;

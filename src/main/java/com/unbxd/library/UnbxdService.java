@@ -184,6 +184,16 @@ class UnbxdService {
 			url.append("&sort=").append(this.getSort(params.getSort()));
 		}
 
+		if (!(params.getFields().isEmpty()))
+		{
+			Iterator<String> iterator = params.getFields().iterator();
+			while(iterator.hasNext())
+			{
+				
+				url.append("&fl=").append(iterator.next());
+			}
+		}
+
 		url.append("&wt=json");
 		// TODO: Get filters, sorting, other options from params
 

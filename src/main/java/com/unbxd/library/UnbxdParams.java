@@ -17,7 +17,7 @@ class UnbxdParams {
 	private String categoryId;
 	private int start;
 	private int limit;
-	
+	private List<String> fields = new ArrayList<String>();	
 	
 	
 	public int getTimeout() {
