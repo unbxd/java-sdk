@@ -26,6 +26,15 @@ class UnbxdParams {
 	public void setTimeout(int timeout) {
 		this.timeout = timeout;
 	}
+
+	public List<String> getFields() {
+		return fields;
+	}
+
+	public void setFields(String field) {
+		//this.fields = fields;
+		this.fields.add(field);
+	}
 	
 	
 	public Map<String, Integer> getSort() {
