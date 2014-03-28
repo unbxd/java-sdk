@@ -46,8 +46,21 @@
 	<artifactId>commons-httpclient</artifactId>
 	<version>3.1</version>
 	</dependency>
-	
-	<dependency>
+
+      <dependency>
+          <groupId>org.apache.httpcomponents</groupId>
+          <artifactId>httpclient</artifactId>
+          <version>4.3.2</version>
+      </dependency>
+
+      <dependency>
+          <groupId>org.codehaus.jackson</groupId>
+          <artifactId>jackson-xc</artifactId>
+          <version>1.9.12</version>
+      </dependency>
+
+
+      <dependency>
 	<groupId>commons-logging</groupId>
 	<artifactId>commons-logging</artifactId>
 	<version>1.1.1</version>
