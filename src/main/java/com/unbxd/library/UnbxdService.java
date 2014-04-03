@@ -107,7 +107,7 @@ class UnbxdService {
 
 		while (rangeIterator.hasNext()) {
 			
-			if (filter.toString() != "(*:* AND (") {
+			if (!(filter.toString().equals("(*:* AND ("))) {
 				filter.append(" AND (");
 			}
 
@@ -170,7 +170,7 @@ class UnbxdService {
 
 		url.append(this.getQueryParam(params));
 		
-		url.append("&start=").append(((params.getStart() != 0) ? params.getStart() : 0)).append("&rows=").append(((params.getLimit() != 0) ? params.getLimit() : 20));
+		url.append("&page=").append(((params.getPage() != 0) ? params.getPage() : 1)).append("&rows=").append(((params.getLimit() != 0) ? params.getLimit() : 10));
 		
 		if (!(params.getFilter().isEmpty()) || !(params.getRangeFilter().isEmpty()))
 		{
@@ -193,9 +193,18 @@ class UnbxdService {
 				url.append("&fl=").append(iterator.next());
 			}
 		}
+		
+		if(!(params.getUserId() == null) && !(params.getUserId().isEmpty()))
+		{
+			url.append("&userId=").append(params.getUserId());
+			
+		}
+		if(!(params.getUserIP() == null) && !(params.getUserIP().isEmpty()))
+		{
+			url.append("&ip=").append(params.getUserIP());
+		}
 
 		url.append("&wt=json");
-		// TODO: Get filters, sorting, other options from params
 
 		return url.toString();
 	}

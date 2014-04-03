@@ -132,8 +132,8 @@ public class UnbxdApi {
 		
 	}
 
-	public UnbxdApi setStart(int start) {
-		this.params.setStart(start);
+	public UnbxdApi setPage(int page) {
+		this.params.setPage(page);
 		return this;
 	}
 
@@ -154,6 +154,17 @@ public class UnbxdApi {
 	public void setTransport(String transport) {
 		this.transport = transport;
 	}
+	
+	public UnbxdApi setUserId(String uid){
+		this.params.setUserId(uid);
+		return this;
+	}
+	
+	public UnbxdApi setIP(String ip){
+		this.params.setUserIP(ip);
+		return this;
+	}
+	
 
 	public UnbxdResult getResults() throws UnbxdException {
 		String address = (this.getTransport() != null ? this.getTransport()

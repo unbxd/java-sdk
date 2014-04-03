@@ -3,6 +3,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.ArrayList;
 
 
 class UnbxdParams {
@@ -15,9 +16,12 @@ class UnbxdParams {
 	private String ruleSet;
 	private String query;
 	private String categoryId;
-	private int start;
 	private int limit;
-	private List<String> fields = new ArrayList<String>();	
+	private int rows;
+	private int page;
+	private List<String> fields = new ArrayList<String>();
+	private String userId;
+	private String userIP;
 	
 	
 	public int getTimeout() {
@@ -99,12 +103,6 @@ class UnbxdParams {
 	public void setCategoryId(String categoryId) {
 		this.categoryId = categoryId;
 	}
-	public int getStart() {
-		return start;
-	}
-	public void setStart(int start) {
-		this.start = start;
-	}
 	public int getLimit() {
 		return limit;
 	}
@@ -116,6 +114,30 @@ class UnbxdParams {
 	}
 	public void setDebug(boolean debug) {
 		this.debug = debug;
+	}
+	public String getUserId() {
+		return userId;
+	}
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+	public String getUserIP() {
+		return userIP;
+	}
+	public void setUserIP(String userIP) {
+		this.userIP = userIP;
+	}
+	public int getRows() {
+		return rows;
+	}
+	public void setRows(int rows) {
+		this.rows = rows;
+	}
+	public int getPage() {
+		return page;
+	}
+	public void setPage(int page) {
+		this.page = page;
 	}
 	
 	
