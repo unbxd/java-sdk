@@ -1,0 +1,53 @@
+package com.unbxd.client.search.response;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Created with IntelliJ IDEA.
+ * User: sourabh
+ * Date: 08/07/14
+ * Time: 11:02 AM
+ * To change this template use File | Settings | File Templates.
+ */
+public class Facet {
+
+    protected String name;
+    protected String _type;
+    protected List<FacetEntry> _facetEntries;
+
+    protected Facet(String facetName, Map<String, Object> params){
+        this.name = facetName;
+        this._type = (String) params.get("type");
+
+        this.generateEntries((List<Object>) params.get("values"));
+    }
+
+    public String getName(){
+        return this.name;
+    }
+    public String getType(){
+        return this._type;
+    }
+
+    protected void generateEntries(List<Object> values){
+        this._facetEntries = new ArrayList<FacetEntry>();
+
+        String term = null;
+
+        for(int i = 0; i < values.size(); i++){
+            if(i % 2 == 0){
+                term = (String) values.get(i);
+            }else{
+                int count = (Integer)values.get(i);
+                this._facetEntries.add(new FacetEntry(term, count));
+            }
+        }
+    }
+
+    public List<FacetEntry> getEntries(){
+        return this._facetEntries;
+    }
+
+}
