@@ -1,4 +1,4 @@
-sdks
+Unbxd Java SDK
 ====
 
-Language bindings for Unbxd APIs
+Java Language bindings for Unbxd Restful APIs

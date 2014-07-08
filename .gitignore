@@ -1,3 +1,5 @@
 .idea/*
 java-sdk.iml
 target/*
+.settings/
+.classpath
