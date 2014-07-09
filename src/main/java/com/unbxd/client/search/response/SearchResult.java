@@ -1,6 +1,5 @@
 package com.unbxd.client.search.response;
 
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -13,15 +12,15 @@ import java.util.Map;
 public class SearchResult {
 
     private String _uniqueId;
-    private Map<String, Object> _values;
+    private Map<String, Object> _attributes;
 
     protected SearchResult(Map<String, Object> product){
-        this._values = product;
-        this._uniqueId = (String) _values.get("uniqueId");
+        this._attributes = product;
+        this._uniqueId = (String) _attributes.get("uniqueId");
     }
 
     public Map<String, Object> getAttributes(){
-        return this._values;
+        return this._attributes;
     }
 
     public String getUniqueId(){
@@ -29,6 +28,6 @@ public class SearchResult {
     }
 
     public Object getAttribute(String fieldName){
-        return this._values.get(fieldName);
+        return this._attributes.get(fieldName);
     }
 }

@@ -11,7 +11,18 @@ import java.util.Map;
  */
 public class AutoSuggestResult {
 
-    public Map<String, Object> getValues();
-    public Object getValue(String fieldName);
+    private Map<String, Object> _attributes;
+
+    protected AutoSuggestResult(Map<String, Object> params) {
+        this._attributes = params;
+    }
+
+    public Map<String, Object> getAttributes(){
+        return this._attributes;
+    }
+
+    public Object getAttribute(String fieldName){
+        return this._attributes.get(fieldName);
+    }
 
 }

@@ -1,5 +1,6 @@
 package com.unbxd.client.search;
 
+import com.unbxd.client.ConnenctionManager;
 import com.unbxd.client.search.exceptions.SearchException;
 import com.unbxd.client.search.response.SearchResponse;
 import org.apache.commons.lang.StringUtils;
@@ -8,7 +9,6 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
-import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -38,36 +38,20 @@ public class SearchClient {
         DESC
     }
 
-    private static PoolingHttpClientConnectionManager __connectionManager;
-
-    private static PoolingHttpClientConnectionManager getConnectionManager(){
-        if(__connectionManager == null){
-            synchronized (SearchClient.class){
-                if(__connectionManager == null){
-                    __connectionManager = new PoolingHttpClientConnectionManager();
-                    __connectionManager.setDefaultMaxPerRoute(50);
-                    __connectionManager.setMaxTotal(100);
-                }
-            }
-        }
-
-        return __connectionManager;
-    }
-
     private static final String __encoding = "UTF-8";
 
     private String siteKey;
     private String apiKey;
     private boolean secure;
 
-    private String _query;
-    private Map<String, String> _queryParams;
-    private String _bucketField;
-    private List<String> _categoryIds;
-    private Map<String, List<String>> _filters;
-    private Map<String, SortDir> _sorts;
-    private int _pageNo;
-    private int _pageSize;
+    private String query;
+    private Map<String, String> queryParams;
+    private String bucketField;
+    private List<String> categoryIds;
+    private Map<String, List<String>> filters;
+    private Map<String, SortDir> sorts;
+    private int pageNo;
+    private int pageSize;
 
 
     protected SearchClient(String siteKey, String apiKey, boolean secure) {
@@ -75,11 +59,11 @@ public class SearchClient {
         this.apiKey = apiKey;
         this.secure = secure;
 
-        this._filters = new HashMap<String, List<String>>();
-        this._sorts = new LinkedHashMap<String, SortDir>(); // The map needs to be insertion ordered.
+        this.filters = new HashMap<String, List<String>>();
+        this.sorts = new LinkedHashMap<String, SortDir>(); // The map needs to be insertion ordered.
 
-        this._pageNo = 1;
-        this._pageSize = 10;
+        this.pageNo = 1;
+        this.pageSize = 10;
     }
 
     private String getSearchUrl(){
@@ -91,44 +75,44 @@ public class SearchClient {
     }
 
     public SearchClient search(String query, Map<String, String> queryParams){
-        this._query = query;
-        this._queryParams = queryParams;
+        this.query = query;
+        this.queryParams = queryParams;
 
         return this;
     }
 
     public SearchClient bucket(String query, String bucketField, Map<String, String> queryParams){
-        this._query = query;
-        this._queryParams = queryParams;
-        this._bucketField = bucketField;
+        this.query = query;
+        this.queryParams = queryParams;
+        this.bucketField = bucketField;
 
         return this;
     }
 
     public SearchClient browse(String nodeId, Map<String, String> queryParams){
-        this._categoryIds = Arrays.asList(nodeId);
-        this._queryParams = queryParams;
+        this.categoryIds = Arrays.asList(nodeId);
+        this.queryParams = queryParams;
 
         return this;
     }
 
     // Has to be used when one node has multiple parents. All the node ids will be ANDed
     public SearchClient browse(List<String> nodeIds, Map<String, String> queryParams){
-        this._categoryIds = nodeIds;
-        this._queryParams = queryParams;
+        this.categoryIds = nodeIds;
+        this.queryParams = queryParams;
 
         return this;
     }
 
     // Values in the same fields are ORed and different fields are ANDed
     public SearchClient addFilter(String fieldName, String... values){
-        this._filters.put(fieldName, Arrays.asList(values));
+        this.filters.put(fieldName, Arrays.asList(values));
 
         return this;
     }
 
     public SearchClient addSort(String field, SortDir sortDir){
-        this._sorts.put(field, sortDir);
+        this.sorts.put(field, sortDir);
 
         return this;
     }
@@ -140,56 +124,56 @@ public class SearchClient {
     }
 
     public SearchClient setPage(int pageNo, int pageSize){
-        this._pageNo = pageNo;
-        this._pageSize = pageSize;
+        this.pageNo = pageNo;
+        this.pageSize = pageSize;
 
         return this;
     }
 
     private String generateUrl() throws SearchException {
-        if(_query != null && _categoryIds != null){
+        if(query != null && categoryIds != null){
             throw new SearchException("Can't set query and node id at the same time");
         }
 
         try {
             StringBuffer sb = new StringBuffer();
 
-            if(_query != null){
+            if(query != null){
                 sb.append(this.getSearchUrl());
-                sb.append("&q=" + URLEncoder.encode(_query, __encoding));
+                sb.append("&q=" + URLEncoder.encode(query, __encoding));
 
-                if(_bucketField != null){
-                    sb.append("&bucket.field=" + URLEncoder.encode(_bucketField, __encoding));
+                if(bucketField != null){
+                    sb.append("&bucket.field=" + URLEncoder.encode(bucketField, __encoding));
                 }
-            }else if(_categoryIds != null && _categoryIds.size() > 0){
+            }else if(categoryIds != null && categoryIds.size() > 0){
                 sb.append(this.getBrowseUrl());
-                sb.append("&category-id=" + URLEncoder.encode(StringUtils.join(_categoryIds, ","), __encoding));
+                sb.append("&category-id=" + URLEncoder.encode(StringUtils.join(categoryIds, ","), __encoding));
             }
 
-            if(_queryParams != null){
-                for(String key : _queryParams.keySet()){
-                    sb.append("&" + key + "=" + URLEncoder.encode(_queryParams.get(key), __encoding));
+            if(queryParams != null){
+                for(String key : queryParams.keySet()){
+                    sb.append("&" + key + "=" + URLEncoder.encode(queryParams.get(key), __encoding));
                 }
             }
 
-            if(_filters != null){
-                for(String key : _filters.keySet()){
-                    for(String value : _filters.get(key)){
+            if(filters != null){
+                for(String key : filters.keySet()){
+                    for(String value : filters.get(key)){
                         sb.append("&filter=" + URLEncoder.encode(key + ":" + value, __encoding));
                     }
                 }
             }
 
-            if(_sorts != null){
+            if(sorts != null){
                 List<String> sorts = new ArrayList<String>();
-                for(String key : _sorts.keySet()){
-                    sorts.add(key + " " + _sorts.get(key).name().toLowerCase());
+                for(String key : this.sorts.keySet()){
+                    sorts.add(key + " " + this.sorts.get(key).name().toLowerCase());
                 }
                 sb.append("&sort=" + URLEncoder.encode(StringUtils.join(sorts, ","), __encoding));
             }
 
-            sb.append("&pageNumber=" + _pageNo);
-            sb.append("&rows=" + _pageSize);
+            sb.append("&pageNumber=" + pageNo);
+            sb.append("&rows=" + pageSize);
 
             return sb.toString();
         } catch (UnsupportedEncodingException e) {
@@ -199,43 +183,35 @@ public class SearchClient {
     }
 
     public SearchResponse execute() throws SearchException {
-        CloseableHttpClient httpClient = HttpClients.custom().setConnectionManager(getConnectionManager()).build();
+        CloseableHttpClient httpClient = HttpClients.custom().setConnectionManager(ConnenctionManager.getConnectionManager()).build();
         try{
             String url = this.generateUrl();
 
             HttpGet get = new HttpGet(url);
             HttpResponse response = httpClient.execute(get);
 
-            try{
-                StringBuffer sb = new StringBuffer();
-                BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
-                String line = "";
-                while ((line = rd.readLine()) != null) {
-                    sb.append(line);
-                }
-
-                String responseText = sb.toString();
-
-                if(response.getStatusLine().getStatusCode() == 200){
-                    Map<String, Object> responseObject = new ObjectMapper().readValue(responseText, Map.class);
-                    return new SearchResponse(responseObject);
-                }else{
-                    LOG.error(responseText);
-                    throw new SearchException(responseText);
-                }
-            } catch (JsonParseException e) {
-                LOG.error(e.getMessage(), e);
-                throw new SearchException(e);
-            } catch (JsonMappingException e) {
-                LOG.error(e.getMessage(), e);
-                throw new SearchException(e);
-            } catch (ClientProtocolException e) {
-                LOG.error(e.getMessage(), e);
-                throw new SearchException(e);
-            } catch (IOException e) {
-                LOG.error(e.getMessage(), e);
-                throw new SearchException(e);
+            StringBuffer sb = new StringBuffer();
+            BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+            String line = "";
+            while ((line = rd.readLine()) != null) {
+                sb.append(line);
             }
+
+            String responseText = sb.toString();
+
+            if(response.getStatusLine().getStatusCode() == 200){
+                Map<String, Object> responseObject = new ObjectMapper().readValue(responseText, Map.class);
+                return new SearchResponse(responseObject);
+            }else{
+                LOG.error(responseText);
+                throw new SearchException(responseText);
+            }
+        } catch (JsonParseException e) {
+            LOG.error(e.getMessage(), e);
+            throw new SearchException(e);
+        } catch (JsonMappingException e) {
+            LOG.error(e.getMessage(), e);
+            throw new SearchException(e);
         } catch (ClientProtocolException e) {
             LOG.error(e.getMessage(), e);
             throw new SearchException(e);

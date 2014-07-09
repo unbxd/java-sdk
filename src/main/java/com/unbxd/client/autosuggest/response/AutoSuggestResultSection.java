@@ -1,5 +1,11 @@
 package com.unbxd.client.autosuggest.response;
 
+import com.unbxd.client.autosuggest.AutoSuggestType;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 /**
  * Created with IntelliJ IDEA.
  * User: sourabh
@@ -9,8 +15,38 @@ package com.unbxd.client.autosuggest.response;
  */
 public class AutoSuggestResultSection {
 
-    public int getResultsCount();
-    public AutoSuggestResult getAt(int i);
-    public AutoSuggestResult[] getResults();
+    private AutoSuggestType _type;
+    private int _resultsCount;
+    private List<AutoSuggestResult> _results;
+
+    public AutoSuggestResultSection(AutoSuggestType type) {
+        _type = type;
+
+        this._results = new ArrayList<AutoSuggestResult>();
+    }
+
+    protected void addResult(Map<String, Object> params){
+        this._results.add(new AutoSuggestResult(params));
+        this._resultsCount++;
+    }
+
+    public AutoSuggestType getType(){
+        return this._type;
+    }
+
+    public int getResultsCount(){
+        return this._resultsCount;
+    }
+
+    public AutoSuggestResult getAt(int i){
+        if(i >= _resultsCount)
+            return null;
+
+        return this._results.get(i);
+    }
+
+    public List<AutoSuggestResult> getResults(){
+        return this._results;
+    }
 
 }

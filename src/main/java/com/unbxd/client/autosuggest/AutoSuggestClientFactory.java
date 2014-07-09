@@ -9,7 +9,7 @@ package com.unbxd.client.autosuggest;
  */
 public class AutoSuggestClientFactory {
 
-    public static AutoSuggestClient getAutoSuggestClient(String siteKey, String apiKey){
-        return new AutoSuggestClient(siteKey, apiKey);
+    public static AutoSuggestClient getAutoSuggestClient(String siteKey, String apiKey, boolean secure){
+        return new AutoSuggestClient(siteKey, apiKey, secure);
     }
 }

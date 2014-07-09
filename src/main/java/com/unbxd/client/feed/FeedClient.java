@@ -1,5 +1,6 @@
 package com.unbxd.client.feed;
 
+import com.unbxd.client.ConnenctionManager;
 import com.unbxd.client.feed.exceptions.FeedInputException;
 import com.unbxd.client.feed.exceptions.FeedUploadException;
 import com.unbxd.client.feed.response.FeedResponse;
@@ -8,7 +9,9 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.impl.client.HttpClients;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -158,7 +161,9 @@ public class FeedClient {
 
     // Uploads the products. Has to handle file creation etc.
     public FeedResponse push(boolean isFullImport) throws FeedUploadException {
-        Document doc = new FeedFile(_fields, _addedDocs.values(), _updatedDocs.values(), _deletedDocs).getDoc();
+        CloseableHttpClient httpClient = HttpClients.custom().setConnectionManager(ConnenctionManager.getConnectionManager()).build();
+
+        Document doc = new FeedFile(_fields, _addedDocs.values(), _updatedDocs.values(), _deletedDocs, _taxonomyNodes, _taxonomyMappings).getDoc();
 
         try {
             long t = new Date().getTime();
@@ -180,14 +185,13 @@ public class FeedClient {
                 url += "?fullimport=true";
             }
 
-            HttpClient client = HttpClientBuilder.create().build();
             HttpPost post = new HttpPost(url);
 
             MultipartEntityBuilder entity = MultipartEntityBuilder.create();
             entity.addPart("file", new FileBody(file));
             post.setEntity(entity.build());
 
-            HttpResponse response = client.execute(post);
+            HttpResponse response = httpClient.execute(post);
 
             t = new Date().getTime() - t;
             LOG.debug("Took : " + t + " millisecs");
@@ -225,6 +229,12 @@ public class FeedClient {
         } catch (TransformerException e) {
             LOG.error(e.getMessage(), e);
             throw new FeedUploadException(e);
+        } finally {
+            try {
+                httpClient.close();
+            } catch (IOException e) {
+                LOG.error(e.getMessage(), e);
+            }
         }
     }
 

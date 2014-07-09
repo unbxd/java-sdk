@@ -19,7 +19,12 @@ import java.util.*;
 public class FeedFile {
     private Document _doc;
 
-    public FeedFile(Collection<FeedField> fields, Collection<FeedProduct> addedDocs, Collection<FeedProduct> updatedDocs, Collection<String> deletedDocs){
+    public FeedFile(Collection<FeedField> fields,
+                    Collection<FeedProduct> addedDocs,
+                    Collection<FeedProduct> updatedDocs,
+                    Collection<String> deletedDocs,
+                    Collection<TaxonomyNode> taxonomyNodes,
+                    Map<String, List<String>> taxonomyMappings){
         DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
         try{
             DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
@@ -49,6 +54,17 @@ public class FeedFile {
                 Element deleteNode = _doc.createElement("delete");
                 catalog.appendChild(deleteNode);
                 writeDelete(deletedDocs, deleteNode);
+            }
+
+            Element taxonomy = _doc.createElement("taxonomy");
+            root.appendChild(taxonomy);
+
+            if(taxonomyNodes.size() > 0){
+                writeTree(taxonomyNodes, taxonomy);
+            }
+
+            if(taxonomyMappings.size() > 0){
+                writeMapping(taxonomyMappings, taxonomy);
             }
         } catch (ParserConfigurationException e) {
             e.printStackTrace();
@@ -142,6 +158,46 @@ public class FeedFile {
             items.appendChild(e);
 
             parent.appendChild(items);
+        }
+    }
+
+    private void writeTree(Collection<TaxonomyNode> nodes, Element parent){
+        for(TaxonomyNode node : nodes){
+            Element tree = _doc.createElement("tree");
+
+            Element nodeId = _doc.createElement("nodeId");
+            nodeId.appendChild(_doc.createTextNode(node.getNodeId()));
+            tree.appendChild(nodeId);
+
+            Element nodeName = _doc.createElement("nodeName");
+            nodeName.appendChild(_doc.createTextNode(node.getNodeName()));
+            tree.appendChild(nodeName);
+
+            for(String parentNodeIdValue : node.getParentNodeIds()){
+                Element parentNodeId = _doc.createElement("parentNodeId");
+                parentNodeId.appendChild(_doc.createTextNode(parentNodeIdValue));
+                tree.appendChild(parentNodeId);
+            }
+
+            parent.appendChild(tree);
+        }
+    }
+
+    private void writeMapping(Map<String, List<String>> taxonomyMappings, Element parent){
+        for(String uniqueId : taxonomyMappings.keySet()){
+            Element mapping = _doc.createElement("mapping");
+
+            Element uniqueIdNode = _doc.createElement("uniqueId");
+            uniqueIdNode.appendChild(_doc.createTextNode(uniqueId));
+            mapping.appendChild(uniqueIdNode);
+
+            for(String nodeIdValue : taxonomyMappings.get(uniqueId)){
+                Element nodeId = _doc.createElement("nodeId");
+                nodeId.appendChild(_doc.createTextNode(nodeIdValue));
+                mapping.appendChild(nodeId);
+            }
+
+            parent.appendChild(mapping);
         }
     }
 

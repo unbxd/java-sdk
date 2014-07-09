@@ -8,4 +8,8 @@ package com.unbxd.client.recommendations;
  * To change this template use File | Settings | File Templates.
  */
 public class RecommendationsClientFactory {
+
+    public static RecommendationsClient getRecommendationsClient(String siteKey, String apiKey, boolean secure){
+        return new RecommendationsClient(siteKey, apiKey, secure);
+    }
 }

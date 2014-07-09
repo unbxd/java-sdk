@@ -4,6 +4,8 @@ import com.unbxd.client.autosuggest.AutoSuggestClient;
 import com.unbxd.client.autosuggest.AutoSuggestClientFactory;
 import com.unbxd.client.feed.FeedClient;
 import com.unbxd.client.feed.FeedClientFactory;
+import com.unbxd.client.recommendations.RecommendationsClient;
+import com.unbxd.client.recommendations.RecommendationsClientFactory;
 import com.unbxd.client.search.SearchClient;
 import com.unbxd.client.search.SearchClientFactory;
 
@@ -36,17 +38,21 @@ public class Unbxd {
 
     // Should return a new FeedClient
     public static FeedClient getFeedClient(){
-        return FeedClientFactory.getFeedClient(siteKey, secretKey);
+        return FeedClientFactory.getFeedClient(siteKey, secretKey, secure);
     }
 
     // Should return a new SearchClient
     public SearchClient getSearchClient(){
-        return SearchClientFactory.getSearchClient(siteKey, apiKey);
+        return SearchClientFactory.getSearchClient(siteKey, apiKey, secure);
     }
 
     // Should return a new AutoSuggestClient
     public AutoSuggestClient getAutoSuggestClient(){
-        return AutoSuggestClientFactory.getAutoSuggestClient(siteKey, apiKey);
+        return AutoSuggestClientFactory.getAutoSuggestClient(siteKey, apiKey, secure);
     }
-    public RecommenderClient getRecommenderClient(); // Should return a new RecommenderClient
+
+    // Should return a new RecommenderClient
+    public RecommendationsClient getRecommendationsClient(){
+        return RecommendationsClientFactory.getRecommendationsClient(siteKey, apiKey, secure);
+    }
 }

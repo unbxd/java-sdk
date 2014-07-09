@@ -11,9 +11,23 @@ import java.util.Map;
  */
 public class RecommendationResult {
 
-    public Map<String, Object> getValues();
-    public String getUniqueId();
-    public Object getValue(String fieldName);
-    public String getReason();
+    private String _uniqueId;
+    private Map<String, Object> _attributes;
 
+    protected RecommendationResult(Map<String,Object> params) {
+        this._attributes = params;
+        this._uniqueId = (String) _attributes.get("uniqueId");
+    }
+
+    public Map<String, Object> getAttributes(){
+        return this._attributes;
+    }
+
+    public String getUniqueId(){
+        return this._uniqueId;
+    }
+
+    public Object getAttribute(String fieldName){
+        return this._attributes.get(fieldName);
+    }
 }

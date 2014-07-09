@@ -1,9 +1,25 @@
 package com.unbxd.client.recommendations;
 
+import com.unbxd.client.ConnenctionManager;
+import com.unbxd.client.recommendations.exceptions.RecommendationsException;
 import com.unbxd.client.recommendations.response.RecommendationResponse;
-import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.map.JsonMappingException;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.
@@ -16,21 +32,7 @@ public class RecommendationsClient {
 
     private static final Logger LOG = LoggerFactory.getLogger(RecommendationsClient.class);
 
-    private static PoolingHttpClientConnectionManager __connectionManager;
-
-    private static PoolingHttpClientConnectionManager getConnectionManager(){
-        if(__connectionManager == null){
-            synchronized (RecommendationsClient.class){
-                if(__connectionManager == null){
-                    __connectionManager = new PoolingHttpClientConnectionManager();
-                    __connectionManager.setDefaultMaxPerRoute(50);
-                    __connectionManager.setMaxTotal(100);
-                }
-            }
-        }
-
-        return __connectionManager;
-    }
+    private static final String __encoding = "UTF-8";
 
     private enum RecommenderBoxType {
         ALSO_VIEWED,
@@ -50,11 +52,11 @@ public class RecommendationsClient {
     private boolean secure;
 
     private RecommenderBoxType _boxType;
-    private String _uid;
-    private String _ip;
-    private String _uniqueId;
-    private String _category;
-    private String _brand;
+    private String uid;
+    private String ip;
+    private String uniqueId;
+    private String category;
+    private String brand;
 
     public RecommendationsClient(String siteKey, String apiKey, boolean secure) {
         this.siteKey = siteKey;
@@ -68,86 +70,174 @@ public class RecommendationsClient {
 
     public RecommendationsClient getRecentlyViewed(String uid){
         this._boxType = RecommenderBoxType.RECENTLY_VIEWED;
-        this._uid = uid;
+        this.uid = uid;
 
         return this;
     }
 
     public RecommendationsClient getRecommendedForYou(String uid, String ip){
         this._boxType = RecommenderBoxType.RECOMMENDED_FOR_YOU;
-        this._uid = uid;
-        this._ip = ip;
+        this.uid = uid;
+        this.ip = ip;
 
         return this;
     }
 
     public RecommendationsClient getMoreLikeThis(String uniqueId, String uid){
         this._boxType = RecommenderBoxType.MORE_LIKE_THESE;
-        this._uid = uid;
-        this._uniqueId = uniqueId;
+        this.uid = uid;
+        this.uniqueId = uniqueId;
 
         return this;
     }
 
     public RecommendationsClient getAlsoViewed(String uniqueId, String uid){
         this._boxType = RecommenderBoxType.ALSO_VIEWED;
-        this._uid = uid;
-        this._uniqueId = uniqueId;
+        this.uid = uid;
+        this.uniqueId = uniqueId;
 
         return this;
     }
 
     public RecommendationsClient getAlsoBought(String uniqueId, String uid){
         this._boxType = RecommenderBoxType.ALSO_BOUGHT;
-        this._uid = uid;
-        this._uniqueId = uniqueId;
+        this.uid = uid;
+        this.uniqueId = uniqueId;
 
         return this;
     }
 
     public RecommendationsClient getTopSellers(String uid, String ip){
         this._boxType = RecommenderBoxType.TOP_SELLERS;
-        this._uid = uid;
-        this._ip = ip;
+        this.uid = uid;
+        this.ip = ip;
 
         return this;
     }
 
     public RecommendationsClient getCategoryTopSellers(String category, String uid, String ip){
         this._boxType = RecommenderBoxType.CATEGORY_TOP_SELLERS;
-        this._uid = uid;
-        this._ip = ip;
-        this._category = category;
+        this.uid = uid;
+        this.ip = ip;
+        this.category = category;
 
         return this;
     }
 
     public RecommendationsClient getBrandTopSellers(String brand, String uid, String ip){
         this._boxType = RecommenderBoxType.BRAND_TOP_SELLERS;
-        this._uid = uid;
-        this._ip = ip;
-        this._brand = brand;
+        this.uid = uid;
+        this.ip = ip;
+        this.brand = brand;
 
         return this;
     }
 
     public RecommendationsClient getPDPTopSellers(String uniqueId, String uid, String ip){
         this._boxType = RecommenderBoxType.PDP_TOP_SELLERS;
-        this._uid = uid;
-        this._ip = ip;
-        this._uniqueId = uniqueId;
+        this.uid = uid;
+        this.ip = ip;
+        this.uniqueId = uniqueId;
 
         return this;
     }
 
     public RecommendationsClient getCartRecommendations(String uid, String ip){
         this._boxType = RecommenderBoxType.CART_RECOMMEND;
-        this._uid = uid;
-        this._ip = ip;
+        this.uid = uid;
+        this.ip = ip;
 
         return this;
     }
 
-    public RecommendationResponse execute();
+    private String generateUrl() throws RecommendationsException {
+        try {
+            StringBuffer sb = new StringBuffer();
+
+            if(_boxType != null){
+                sb.append(this.getRecommendationUrl());
+
+                if(_boxType.equals(RecommenderBoxType.ALSO_VIEWED)){
+                    sb.append("also-viewed/" + URLEncoder.encode(uniqueId, __encoding) + "?format=json");
+                }else if(_boxType.equals(RecommenderBoxType.ALSO_BOUGHT)){
+                    sb.append("also-bought/" + URLEncoder.encode(uniqueId, __encoding) + "?format=json");
+                }else if(_boxType.equals(RecommenderBoxType.RECENTLY_VIEWED)){
+                    sb.append("recently-viewed/" + URLEncoder.encode(uid, __encoding) + "?format=json");
+                }else if(_boxType.equals(RecommenderBoxType.RECOMMENDED_FOR_YOU)){
+                    sb.append("recommend/" + URLEncoder.encode(uid, __encoding) + "?format=json");
+                }else if(_boxType.equals(RecommenderBoxType.MORE_LIKE_THESE)){
+                    sb.append("more-like-these/" + URLEncoder.encode(uniqueId, __encoding) + "?format=json");
+                }else if(_boxType.equals(RecommenderBoxType.TOP_SELLERS)){
+                    sb.append("top-sellers/" + "?format=json");
+                }else if(_boxType.equals(RecommenderBoxType.CATEGORY_TOP_SELLERS)){
+                    sb.append("category-top-sellers/" + URLEncoder.encode(category, __encoding) + "?format=json");
+                }else if(_boxType.equals(RecommenderBoxType.BRAND_TOP_SELLERS)){
+                    sb.append("brand-top-sellers/" + URLEncoder.encode(brand, __encoding) + "?format=json");
+                }else if(_boxType.equals(RecommenderBoxType.PDP_TOP_SELLERS)){
+                    sb.append("pdp-top-sellers/" + URLEncoder.encode(uniqueId, __encoding) + "?format=json");
+                }else if(_boxType.equals(RecommenderBoxType.CART_RECOMMEND)){
+                    sb.append("cart-recommend/" + URLEncoder.encode(uid, __encoding) + "?format=json");
+                }
+
+                if(uid != null)
+                    sb.append("&uid=" + URLEncoder.encode(uid, __encoding));
+
+                if(ip != null)
+                    sb.append("&ip=" + URLEncoder.encode(ip, __encoding));
+            }else{
+                throw new RecommendationsException("Couldn't determine which recommendation widget to call.");
+            }
+
+            return sb.toString();
+        } catch (UnsupportedEncodingException e) {
+            LOG.error("Encoding error", e);
+            throw new RecommendationsException(e);
+        }
+    }
+
+    public RecommendationResponse execute() throws RecommendationsException {
+        CloseableHttpClient httpClient = HttpClients.custom().setConnectionManager(ConnenctionManager.getConnectionManager()).build();
+        try{
+            String url = this.generateUrl();
+
+            HttpGet get = new HttpGet(url);
+            HttpResponse response = httpClient.execute(get);
+
+            StringBuffer sb = new StringBuffer();
+            BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+            String line = "";
+            while ((line = rd.readLine()) != null) {
+                sb.append(line);
+            }
+
+            String responseText = sb.toString();
+
+            if(response.getStatusLine().getStatusCode() == 200){
+                Map<String, Object> responseObject = new ObjectMapper().readValue(responseText, Map.class);
+                return new RecommendationResponse(responseObject);
+            } else {
+                LOG.error(responseText);
+                throw new RecommendationsException(responseText);
+            }
+        } catch (JsonParseException e) {
+            LOG.error(e.getMessage(), e);
+            throw new RecommendationsException(e);
+        } catch (JsonMappingException e) {
+            LOG.error(e.getMessage(), e);
+            throw new RecommendationsException(e);
+        } catch (ClientProtocolException e) {
+            LOG.error(e.getMessage(), e);
+            throw new RecommendationsException(e);
+        } catch (IOException e) {
+            LOG.error(e.getMessage(), e);
+            throw new RecommendationsException(e);
+        } finally {
+            try {
+                httpClient.close();
+            } catch (IOException e) {
+                LOG.error(e.getMessage(), e);
+            }
+        }
+    }
 
 }
