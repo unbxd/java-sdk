@@ -17,7 +17,7 @@ public class SearchClientTest extends TestCase{
         Unbxd.configure("demo-u1393483043451", "ae30782589df23780a9d98502388555f", "ae30782589df23780a9d98502388555f");
     }
 
-    public void test_search() throws SearchException {
+    public void test_search() throws SearchException, ConfigException {
         Map<String, String> queryParams = new HashMap<String, String>();
         queryParams.put("fl", "uniqueId");
         queryParams.put("stats", "price");
@@ -43,7 +43,7 @@ public class SearchClientTest extends TestCase{
         Assert.assertNotNull(response.getStats().getStat("price").getMin());
     }
 
-    public void test_bucket() throws SearchException {
+    public void test_bucket() throws SearchException, ConfigException {
         Map<String, String> queryParams = new HashMap<String, String>();
         queryParams.put("fl", "uniqueId");
         queryParams.put("stats", "price");

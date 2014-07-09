@@ -21,7 +21,7 @@ public class RecommendationsClientTest extends TestCase{
         Unbxd.configure("demo-u1393483043451", "ae30782589df23780a9d98502388555f", "ae30782589df23780a9d98502388555f");
     }
 
-    public void test() throws RecommendationsException {
+    public void test() throws RecommendationsException, ConfigException {
         RecommendationResponse response = Unbxd.getRecommendationsClient().getMoreLikeThis("532062745e4016fd1c73b7a4", null).execute();
 
         Assert.assertNotNull(response);

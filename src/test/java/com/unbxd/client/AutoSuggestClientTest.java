@@ -23,7 +23,7 @@ public class AutoSuggestClientTest extends TestCase{
         Unbxd.configure("demo-u1393483043451", "ae30782589df23780a9d98502388555f", "ae30782589df23780a9d98502388555f");
     }
 
-    public void test_autosuggest() throws AutoSuggestException {
+    public void test_autosuggest() throws AutoSuggestException, ConfigException {
         AutoSuggestResponse response = Unbxd.getAutoSuggestClient()
                 .autosuggest("sh")
                 .execute();

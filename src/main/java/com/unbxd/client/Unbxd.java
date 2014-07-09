@@ -8,6 +8,7 @@ import com.unbxd.client.recommendations.RecommendationsClient;
 import com.unbxd.client.recommendations.RecommendationsClientFactory;
 import com.unbxd.client.search.SearchClient;
 import com.unbxd.client.search.SearchClientFactory;
+import org.apache.http.annotation.NotThreadSafe;
 
 /**
  * Created with IntelliJ IDEA.
@@ -16,7 +17,10 @@ import com.unbxd.client.search.SearchClientFactory;
  * Time: 3:21 PM
  * To change this template use File | Settings | File Templates.
  */
+@NotThreadSafe
 public class Unbxd {
+
+    private static boolean _configured = false;
 
     private static String siteKey;
     private static String apiKey;
@@ -29,6 +33,8 @@ public class Unbxd {
         Unbxd.siteKey = siteKey;
         Unbxd.apiKey = apiKey;
         Unbxd.secretKey = secretKey;
+
+        _configured = true;
     }
 
     public static void configure(String siteKey, String apiKey, String secretKey, boolean secure){
@@ -37,22 +43,30 @@ public class Unbxd {
     }
 
     // Should return a new FeedClient
-    public static FeedClient getFeedClient(){
+    public static FeedClient getFeedClient() throws ConfigException {
+        if(!_configured)
+            throw new ConfigException("Please configure first with Unbxd.configure()");
         return FeedClientFactory.getFeedClient(siteKey, secretKey, secure);
     }
 
     // Should return a new SearchClient
-    public static SearchClient getSearchClient(){
+    public static SearchClient getSearchClient() throws ConfigException {
+        if(!_configured)
+            throw new ConfigException("Please configure first with Unbxd.configure()");
         return SearchClientFactory.getSearchClient(siteKey, apiKey, secure);
     }
 
     // Should return a new AutoSuggestClient
-    public static AutoSuggestClient getAutoSuggestClient(){
+    public static AutoSuggestClient getAutoSuggestClient() throws ConfigException {
+        if(!_configured)
+            throw new ConfigException("Please configure first with Unbxd.configure()");
         return AutoSuggestClientFactory.getAutoSuggestClient(siteKey, apiKey, secure);
     }
 
     // Should return a new RecommenderClient
-    public static RecommendationsClient getRecommendationsClient(){
+    public static RecommendationsClient getRecommendationsClient() throws ConfigException {
+        if(!_configured)
+            throw new ConfigException("Please configure first with Unbxd.configure()");
         return RecommendationsClientFactory.getRecommendationsClient(siteKey, apiKey, secure);
     }
 }
