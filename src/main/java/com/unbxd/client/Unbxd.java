@@ -8,7 +8,6 @@ import com.unbxd.client.recommendations.RecommendationsClient;
 import com.unbxd.client.recommendations.RecommendationsClientFactory;
 import com.unbxd.client.search.SearchClient;
 import com.unbxd.client.search.SearchClientFactory;
-import org.apache.http.annotation.NotThreadSafe;
 
 /**
  * Created with IntelliJ IDEA.
@@ -17,7 +16,6 @@ import org.apache.http.annotation.NotThreadSafe;
  * Time: 3:21 PM
  * To change this template use File | Settings | File Templates.
  */
-@NotThreadSafe
 public class Unbxd {
 
     private static boolean _configured = false;

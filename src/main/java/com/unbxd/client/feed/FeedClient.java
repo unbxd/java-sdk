@@ -1,16 +1,14 @@
 package com.unbxd.client.feed;
 
-import com.unbxd.client.ConnenctionManager;
+import com.unbxd.client.ConnectionManager;
 import com.unbxd.client.feed.exceptions.FeedInputException;
 import com.unbxd.client.feed.exceptions.FeedUploadException;
 import com.unbxd.client.feed.response.FeedResponse;
 import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.slf4j.Logger;
@@ -161,7 +159,7 @@ public class FeedClient {
 
     // Uploads the products. Has to handle file creation etc.
     public FeedResponse push(boolean isFullImport) throws FeedUploadException {
-        CloseableHttpClient httpClient = HttpClients.custom().setConnectionManager(ConnenctionManager.getConnectionManager()).build();
+        CloseableHttpClient httpClient = HttpClients.custom().setConnectionManager(ConnectionManager.getConnectionManager()).build();
 
         Document doc = new FeedFile(_fields, _addedDocs.values(), _updatedDocs.values(), _deletedDocs, _taxonomyNodes, _taxonomyMappings).getDoc();
 
@@ -196,27 +194,25 @@ public class FeedClient {
             t = new Date().getTime() - t;
             LOG.debug("Took : " + t + " millisecs");
 
-            BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
-            StringBuffer sb = new StringBuffer();
-            String line = "";
-            while ((line = rd.readLine()) != null) {
-                sb.append(line);
-            }
-
-            String responseText = sb.toString();
-
             if(response.getStatusLine().getStatusCode() == 200){
-                LOG.debug("File upload responded with : " + responseText);
-
                 try{
                     ObjectMapper mapper = new ObjectMapper();
-                    Map<String, Object> map = mapper.readValue(responseText, Map.class);
+                    Map<String, Object> map = mapper.readValue(new InputStreamReader(response.getEntity().getContent()), Map.class);
                     return new FeedResponse(map);
                 }catch (Exception e){
                     LOG.error("Failed to parse response", e);
                     throw new FeedUploadException(e);
                 }
             }else {
+                BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+                StringBuffer sb = new StringBuffer();
+                String line = "";
+                while ((line = rd.readLine()) != null) {
+                    sb.append(line);
+                }
+
+                String responseText = sb.toString();
+
                 LOG.error(responseText);
                 throw new FeedUploadException(responseText);
             }

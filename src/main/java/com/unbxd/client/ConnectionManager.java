@@ -14,13 +14,13 @@ import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
  * Time: 11:39 AM
  * To change this template use File | Settings | File Templates.
  */
-public class ConnenctionManager {
+public class ConnectionManager {
 
     private static PoolingHttpClientConnectionManager __connectionManager;
 
     public static PoolingHttpClientConnectionManager getConnectionManager(){
         if(__connectionManager == null){
-            synchronized (ConnenctionManager.class){
+            synchronized (ConnectionManager.class){
                 if(__connectionManager == null){
 
                     Registry registry = RegistryBuilder.<ConnectionSocketFactory>create()

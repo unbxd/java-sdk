@@ -1,6 +1,6 @@
 package com.unbxd.client.recommendations;
 
-import com.unbxd.client.ConnenctionManager;
+import com.unbxd.client.ConnectionManager;
 import com.unbxd.client.recommendations.exceptions.RecommendationsException;
 import com.unbxd.client.recommendations.response.RecommendationResponse;
 import org.apache.http.HttpResponse;
@@ -196,26 +196,26 @@ public class RecommendationsClient {
     }
 
     public RecommendationResponse execute() throws RecommendationsException {
-        CloseableHttpClient httpClient = HttpClients.custom().setConnectionManager(ConnenctionManager.getConnectionManager()).build();
+        CloseableHttpClient httpClient = HttpClients.custom().setConnectionManager(ConnectionManager.getConnectionManager()).build();
         try{
             String url = this.generateUrl();
 
             HttpGet get = new HttpGet(url);
             HttpResponse response = httpClient.execute(get);
 
-            StringBuffer sb = new StringBuffer();
-            BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
-            String line = "";
-            while ((line = rd.readLine()) != null) {
-                sb.append(line);
-            }
-
-            String responseText = sb.toString();
-
             if(response.getStatusLine().getStatusCode() == 200){
-                Map<String, Object> responseObject = new ObjectMapper().readValue(responseText, Map.class);
+                Map<String, Object> responseObject = new ObjectMapper().readValue(new InputStreamReader(response.getEntity().getContent()), Map.class);
                 return new RecommendationResponse(responseObject);
             } else {
+                StringBuffer sb = new StringBuffer();
+                BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+                String line = "";
+                while ((line = rd.readLine()) != null) {
+                    sb.append(line);
+                }
+
+                String responseText = sb.toString();
+
                 LOG.error(responseText);
                 throw new RecommendationsException(responseText);
             }
