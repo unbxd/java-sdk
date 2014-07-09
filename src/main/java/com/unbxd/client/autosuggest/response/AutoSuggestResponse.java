@@ -20,23 +20,23 @@ public class AutoSuggestResponse {
     private AutoSuggestResults _results;
 
     public AutoSuggestResponse(Map<String, Object> params) {
-        Map<String, Object> metaData = (Map<String, Object>) params.get("searchMetaData");
-
-        this._statusCode = (Integer) metaData.get("status");
-        this._queryTime = (Integer) metaData.get("queryTime");
-
-        if(params.containsKey("response")){
-            Map<String, Object> response = (Map<String, Object>) params.get("response");
-            this._totalResultsCount = (Integer) response.get("numberOfProducts");
-            this._results = new AutoSuggestResults((List<Map<String, Object>>) response.get("products"));
-        }
-
         if(params.containsKey("error")){
             Map<String, Object> error = (Map<String, Object>) params.get("error");
             this._errorCode = (Integer) error.get("code");
             this._message = (String) error.get("msg");
         }else{
             this._message = "OK";
+
+            Map<String, Object> metaData = (Map<String, Object>) params.get("searchMetaData");
+
+            this._statusCode = (Integer) metaData.get("status");
+            this._queryTime = (Integer) metaData.get("queryTime");
+
+            if(params.containsKey("response")){
+                Map<String, Object> response = (Map<String, Object>) params.get("response");
+                this._totalResultsCount = (Integer) response.get("numberOfProducts");
+                this._results = new AutoSuggestResults((List<Map<String, Object>>) response.get("products"));
+            }
         }
     }
 

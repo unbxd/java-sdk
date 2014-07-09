@@ -17,7 +17,8 @@ public class Stats {
     protected Stats(Map<String, Object> params){
         this._stats = new HashMap<String, Stat>();
         for(String field : params.keySet()){
-            this._stats.put(field, new Stat((Map<String, Object>) params.get(field)));
+            if(params.get(field) != null)
+                this._stats.put(field, new Stat((Map<String, Object>) params.get(field)));
         }
     }
 

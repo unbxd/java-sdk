@@ -170,12 +170,6 @@ public class AutoSuggestClient {
         } catch (IOException e) {
             LOG.error(e.getMessage(), e);
             throw new AutoSuggestException(e);
-        } finally {
-            try {
-                httpClient.close();
-            } catch (IOException e) {
-                LOG.error(e.getMessage(), e);
-            }
         }
     }
 

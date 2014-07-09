@@ -150,21 +150,21 @@ public class SearchClient {
                 sb.append("&category-id=" + URLEncoder.encode(StringUtils.join(categoryIds, ","), __encoding));
             }
 
-            if(queryParams != null){
+            if(queryParams != null && queryParams.size() > 0){
                 for(String key : queryParams.keySet()){
                     sb.append("&" + key + "=" + URLEncoder.encode(queryParams.get(key), __encoding));
                 }
             }
 
-            if(filters != null){
+            if(filters != null && filters.size() > 0){
                 for(String key : filters.keySet()){
                     for(String value : filters.get(key)){
-                        sb.append("&filter=" + URLEncoder.encode(key + ":" + value, __encoding));
+                        sb.append("&filter=" + URLEncoder.encode(key + ":\"" + value + "\"", __encoding));
                     }
                 }
             }
 
-            if(sorts != null){
+            if(sorts != null && sorts.size() > 0){
                 List<String> sorts = new ArrayList<String>();
                 for(String key : this.sorts.keySet()){
                     sorts.add(key + " " + this.sorts.get(key).name().toLowerCase());
@@ -218,12 +218,6 @@ public class SearchClient {
         } catch (IOException e) {
             LOG.error(e.getMessage(), e);
             throw new SearchException(e);
-        } finally {
-            try {
-                httpClient.close();
-            } catch (IOException e) {
-                LOG.error(e.getMessage(), e);
-            }
         }
     }
 }

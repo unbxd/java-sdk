@@ -25,47 +25,47 @@ public class SearchResponse {
     private List<String> _spellCorrections;
 
     public SearchResponse(Map<String, Object> params){
-        Map<String, Object> metaData = (Map<String, Object>) params.get("searchMetaData");
-
-        this._statusCode = (Integer) metaData.get("status");
-        this._queryTime = (Integer) metaData.get("queryTime");
-
-        if(params.containsKey("response")){
-            Map<String, Object> response = (Map<String, Object>) params.get("response");
-            this._totalResultsCount = (Integer) response.get("numberOfProducts");
-            this._results = new SearchResults((List<Map<String, Object>>) response.get("products"));
-        }
-
-        if(params.containsKey("buckets")){
-            Map<String, Object> response = (Map<String, Object>) params.get("buckets");
-            this._totalResultsCount = (Integer) response.get("totalProducts");
-            this._buckets = new BucketResults(response);
-        }
-
-        if(params.containsKey("facets")){
-            Map<String, Object> facets = (Map<String, Object>) params.get("facets");
-            this._facets = new Facets(facets);
-        }
-
-        if(params.containsKey("stats")){
-            Map<String, Object> stats = (Map<String, Object>) params.get("stats");
-            this._stats = new Stats(stats);
-        }
-
-        if(params.containsKey("didYouMean")){
-            this._spellCorrections = new ArrayList<String>();
-            List<Map<String, Object>> dym = (List<Map<String, Object>>) params.get("didYouMean");
-            for(Map<String, Object> suggestion : dym){
-                _spellCorrections.add((String) suggestion.get("suggestion"));
-            }
-        }
-
         if(params.containsKey("error")){
             Map<String, Object> error = (Map<String, Object>) params.get("error");
             this._errorCode = (Integer) error.get("code");
             this._message = (String) error.get("msg");
         }else{
             this._message = "OK";
+
+            Map<String, Object> metaData = (Map<String, Object>) params.get("searchMetaData");
+
+            this._statusCode = (Integer) metaData.get("status");
+            this._queryTime = (Integer) metaData.get("queryTime");
+
+            if(params.containsKey("response")){
+                Map<String, Object> response = (Map<String, Object>) params.get("response");
+                this._totalResultsCount = (Integer) response.get("numberOfProducts");
+                this._results = new SearchResults((List<Map<String, Object>>) response.get("products"));
+            }
+
+            if(params.containsKey("buckets")){
+                Map<String, Object> response = (Map<String, Object>) params.get("buckets");
+                this._totalResultsCount = (Integer) response.get("totalProducts");
+                this._buckets = new BucketResults(response);
+            }
+
+            if(params.containsKey("facets")){
+                Map<String, Object> facets = (Map<String, Object>) params.get("facets");
+                this._facets = new Facets(facets);
+            }
+
+            if(params.containsKey("stats")){
+                Map<String, Object> stats = (Map<String, Object>) params.get("stats");
+                this._stats = new Stats(stats);
+            }
+
+            if(params.containsKey("didYouMean")){
+                this._spellCorrections = new ArrayList<String>();
+                List<Map<String, Object>> dym = (List<Map<String, Object>>) params.get("didYouMean");
+                for(Map<String, Object> suggestion : dym){
+                    _spellCorrections.add((String) suggestion.get("suggestion"));
+                }
+            }
         }
     }
 

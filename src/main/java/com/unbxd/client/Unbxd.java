@@ -42,17 +42,17 @@ public class Unbxd {
     }
 
     // Should return a new SearchClient
-    public SearchClient getSearchClient(){
+    public static SearchClient getSearchClient(){
         return SearchClientFactory.getSearchClient(siteKey, apiKey, secure);
     }
 
     // Should return a new AutoSuggestClient
-    public AutoSuggestClient getAutoSuggestClient(){
+    public static AutoSuggestClient getAutoSuggestClient(){
         return AutoSuggestClientFactory.getAutoSuggestClient(siteKey, apiKey, secure);
     }
 
     // Should return a new RecommenderClient
-    public RecommendationsClient getRecommendationsClient(){
+    public static RecommendationsClient getRecommendationsClient(){
         return RecommendationsClientFactory.getRecommendationsClient(siteKey, apiKey, secure);
     }
 }

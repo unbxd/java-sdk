@@ -1,5 +1,7 @@
 package com.unbxd.client.search.response;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -18,6 +20,9 @@ public class BucketResults {
 
     protected BucketResults(Map<String, Object> params){
         this._numberOfBuckets = (Integer) params.get("numberOfBuckets");
+
+        this._buckets = new ArrayList<BucketResult>();
+        this._bucketsMap = new HashMap<String, BucketResult>();
         for(String bucketKey : params.keySet()){
             if(bucketKey.equals("totalProducts") || bucketKey.equals("numberOfBuckets")){
                 continue;
@@ -33,7 +38,7 @@ public class BucketResults {
         return this._numberOfBuckets;
     }
 
-    public BucketResult getBuckets(String value){
+    public BucketResult getBucket(String value){
         return this._bucketsMap.get(value);
     }
 

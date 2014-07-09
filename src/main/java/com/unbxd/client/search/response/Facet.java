@@ -21,7 +21,12 @@ public class Facet {
         this.name = facetName;
         this._type = (String) params.get("type");
 
-        this.generateEntries((List<Object>) params.get("values"));
+        if(params.get("values") instanceof Map){
+            Map<String, Object> map = (Map<String, Object>) params.get("values");
+            this.generateEntries((List<Object>) map.get("counts"));
+        }else{
+            this.generateEntries((List<Object>) params.get("values"));
+        }
     }
 
     public String getName(){

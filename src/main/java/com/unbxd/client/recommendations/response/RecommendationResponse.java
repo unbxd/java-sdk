@@ -19,7 +19,8 @@ public class RecommendationResponse {
     private RecommendationResults _results;
 
     public RecommendationResponse(Map<String, Object> params) {
-        this._statusCode = (Integer) params.get("status");
+        if(params.containsKey("status"))
+            this._statusCode = (Integer) params.get("status");
 
         this._totalResultsCount = (Integer) params.get("count");
 
@@ -27,7 +28,7 @@ public class RecommendationResponse {
             this._results = new RecommendationResults((List<Map<String, Object>>) params.get("Recommendations"));
         }
 
-        if(params.containsKey("error")){
+        if(params.get("error") != null){
             Map<String, Object> error = (Map<String, Object>) params.get("error");
             this._errorCode = (Integer) error.get("code");
             this._message = (String) error.get("message");
