@@ -134,6 +134,7 @@ public class FeedFile {
                     for(String field : associatedProduct.keySet()){
                         writeAttribute(associatedItems, field, associatedProduct.get(field), true);
                     }
+                    items.appendChild(associatedItems);
                 }
             }
 

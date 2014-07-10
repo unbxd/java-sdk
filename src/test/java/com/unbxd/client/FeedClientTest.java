@@ -3,6 +3,7 @@ package com.unbxd.client;
 import com.unbxd.client.feed.DataType;
 import com.unbxd.client.feed.FeedProduct;
 import com.unbxd.client.feed.TaxonomyNode;
+import com.unbxd.client.feed.exceptions.FeedInputException;
 import com.unbxd.client.feed.exceptions.FeedUploadException;
 import com.unbxd.client.feed.response.FeedResponse;
 import junit.framework.TestCase;
@@ -27,7 +28,7 @@ public class FeedClientTest extends TestCase {
         Unbxd.configure("sdk_test-u1404981344388", "149abee9a65f0d135cd07c90308c54d4", "149abee9a65f0d135cd07c90308c54d4");
     }
 
-    public void test_product_upload() throws ConfigException, FeedUploadException {
+    public void test_product_upload() throws ConfigException, FeedUploadException, FeedInputException {
         Map<String, Object> product = new HashMap<String, Object>();
         product.put("title", "phodu joote");
         product.put("some-field", "test-field-value");
@@ -35,11 +36,17 @@ public class FeedClientTest extends TestCase {
         product.put("category", "Sports Shoes");
         product.put("price", 1100);
 
+        Map<String, Object> variant = new HashMap<String, Object>();
+        variant.put("gender", "male");
+
         FeedResponse response = Unbxd.getFeedClient()
                 .addSchema("some-field", DataType.TEXT)
+                .addSchema("genderAssociated", DataType.TEXT, true, true)
                 .addProduct(new FeedProduct("testsku", product))
                 .addProduct(new FeedProduct("testsku2", product))
+                .addVariant("testsku2", variant)
                 .push(false);
+        System.out.println(response.toString());
         Assert.assertNotNull(response);
         Assert.assertEquals(200, response.getStatusCode());
         Assert.assertNotNull(response.getMessage());
