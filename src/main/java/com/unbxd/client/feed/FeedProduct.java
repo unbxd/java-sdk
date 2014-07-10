@@ -15,6 +15,10 @@ public class FeedProduct {
     private List<Map<String, Object>> _associatedDocuments;
 
     public FeedProduct(String uniqueId, Map<String, Object> attributes){
+        if(attributes == null)
+            attributes = new HashMap<String, Object>();
+        attributes.put("uniqueId", uniqueId);
+
         _attributes = attributes;
         _associatedDocuments = new ArrayList<Map<String, Object>>();
 

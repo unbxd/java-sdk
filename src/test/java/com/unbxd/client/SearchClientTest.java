@@ -43,6 +43,32 @@ public class SearchClientTest extends TestCase{
         Assert.assertNotNull(response.getStats().getStat("price").getMin());
     }
 
+    public void test_browse() throws SearchException, ConfigException {
+        Map<String, String> queryParams = new HashMap<String, String>();
+        queryParams.put("fl", "uniqueId");
+        queryParams.put("stats", "price");
+
+        SearchResponse response = Unbxd.getSearchClient()
+                .browse("1", queryParams)
+                .addFilter("color_fq","black")
+                .addFilter("Brand_fq", "Ralph Lauren")
+                .addSort("price", SearchClient.SortDir.ASC)
+                .setPage(2, 5)
+                .execute();
+
+        Assert.assertNotNull(response);
+        Assert.assertEquals(0, response.getStatusCode());
+        Assert.assertNotEquals(0, response.getQueryTime());
+        Assert.assertEquals(0, response.getErrorCode());
+        Assert.assertEquals("OK", response.getMessage());
+        Assert.assertNotEquals(0, response.getTotalResultsCount());
+        Assert.assertEquals(5, response.getResults().getResultsCount());
+        Assert.assertEquals(1, response.getResults().getAt(0).getAttributes().size());
+        Assert.assertNotNull(response.getResults().getAt(0).getAttributes().get("uniqueId"));
+        Assert.assertNotNull(response.getStats());
+        Assert.assertNotNull(response.getStats().getStat("price").getMin());
+    }
+
     public void test_bucket() throws SearchException, ConfigException {
         Map<String, String> queryParams = new HashMap<String, String>();
         queryParams.put("fl", "uniqueId");

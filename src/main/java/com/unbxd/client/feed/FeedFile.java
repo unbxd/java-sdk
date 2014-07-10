@@ -32,39 +32,43 @@ public class FeedFile {
             Element root = _doc.createElement("feed");
             _doc.appendChild(root);
 
-            Element catalog = _doc.createElement("catalog");
-            root.appendChild(catalog);
+            if(fields.size() > 0 || addedDocs.size() > 0 || updatedDocs.size() > 0 || deletedDocs.size() > 0){
+                Element catalog = _doc.createElement("catalog");
+                root.appendChild(catalog);
 
-            if(fields.size() > 0)
-                writeSchema(fields, catalog);
+                if(fields.size() > 0)
+                    writeSchema(fields, catalog);
 
-            if(addedDocs.size() > 0){
-                Element addNode = _doc.createElement("add");
-                catalog.appendChild(addNode);
-                writeAdd(addedDocs, addNode);
+                if(addedDocs.size() > 0){
+                    Element addNode = _doc.createElement("add");
+                    catalog.appendChild(addNode);
+                    writeAdd(addedDocs, addNode);
+                }
+
+                if(updatedDocs.size() > 0){
+                    Element updateNode = _doc.createElement("update");
+                    catalog.appendChild(updateNode);
+                    writeUpdate(updatedDocs, updateNode);
+                }
+
+                if(deletedDocs.size() > 0){
+                    Element deleteNode = _doc.createElement("delete");
+                    catalog.appendChild(deleteNode);
+                    writeDelete(deletedDocs, deleteNode);
+                }
             }
 
-            if(updatedDocs.size() > 0){
-                Element updateNode = _doc.createElement("update");
-                catalog.appendChild(updateNode);
-                writeUpdate(updatedDocs, updateNode);
-            }
+            if(taxonomyNodes.size() > 0 || taxonomyMappings.size() > 0){
+                Element taxonomy = _doc.createElement("taxonomy");
+                root.appendChild(taxonomy);
 
-            if(deletedDocs.size() > 0){
-                Element deleteNode = _doc.createElement("delete");
-                catalog.appendChild(deleteNode);
-                writeDelete(deletedDocs, deleteNode);
-            }
+                if(taxonomyNodes.size() > 0){
+                    writeTree(taxonomyNodes, taxonomy);
+                }
 
-            Element taxonomy = _doc.createElement("taxonomy");
-            root.appendChild(taxonomy);
-
-            if(taxonomyNodes.size() > 0){
-                writeTree(taxonomyNodes, taxonomy);
-            }
-
-            if(taxonomyMappings.size() > 0){
-                writeMapping(taxonomyMappings, taxonomy);
+                if(taxonomyMappings.size() > 0){
+                    writeMapping(taxonomyMappings, taxonomy);
+                }
             }
         } catch (ParserConfigurationException e) {
             e.printStackTrace();
@@ -173,10 +177,12 @@ public class FeedFile {
             nodeName.appendChild(_doc.createTextNode(node.getNodeName()));
             tree.appendChild(nodeName);
 
-            for(String parentNodeIdValue : node.getParentNodeIds()){
-                Element parentNodeId = _doc.createElement("parentNodeId");
-                parentNodeId.appendChild(_doc.createTextNode(parentNodeIdValue));
-                tree.appendChild(parentNodeId);
+            if(node.getParentNodeIds() != null){
+                for(String parentNodeIdValue : node.getParentNodeIds()){
+                    Element parentNodeId = _doc.createElement("parentNodeId");
+                    parentNodeId.appendChild(_doc.createTextNode(parentNodeIdValue));
+                    tree.appendChild(parentNodeId);
+                }
             }
 
             parent.appendChild(tree);

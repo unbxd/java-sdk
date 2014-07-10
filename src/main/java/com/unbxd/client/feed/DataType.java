@@ -26,4 +26,13 @@ public enum DataType {
     public String getValue() {
         return value;
     }
+
+    public static DataType fromString(String value){
+        for(DataType type : DataType.values()) {
+            if(type.getValue().equals(value))
+                return type;
+        }
+
+        return null;
+    }
 }

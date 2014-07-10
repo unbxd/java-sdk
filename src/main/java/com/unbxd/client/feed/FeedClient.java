@@ -10,9 +10,8 @@ import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.log4j.Logger;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 
 import javax.xml.transform.Transformer;
@@ -33,7 +32,7 @@ import java.util.*;
  */
 public class FeedClient {
 
-    private static final Logger LOG = LoggerFactory.getLogger(FeedClient.class);
+    private static final Logger LOG = Logger.getLogger(FeedClient.class);
 
     private String siteKey;
     private String secretKey;
@@ -216,13 +215,7 @@ public class FeedClient {
                 LOG.error(responseText);
                 throw new FeedUploadException(responseText);
             }
-        } catch (IOException e) {
-            LOG.error(e.getMessage(), e);
-            throw new FeedUploadException(e);
-        } catch (TransformerConfigurationException e) {
-            LOG.error(e.getMessage(), e);
-            throw new FeedUploadException(e);
-        } catch (TransformerException e) {
+        } catch (Exception e) {
             LOG.error(e.getMessage(), e);
             throw new FeedUploadException(e);
         }

@@ -35,8 +35,11 @@ public class FeedResponse {
             }
         }
 
-        this._rowNum = (Integer) response.get("rowNum");
-        this._colNum = (Integer) response.get("colNum");
+        if(response.get("rowNum") != null)
+            this._rowNum = Integer.parseInt((String) response.get("rowNum"));
+
+        if(response.get("colNum") != null)
+            this._colNum = Integer.parseInt((String) response.get("colNum"));
     }
 
     public int getStatusCode(){
@@ -65,5 +68,19 @@ public class FeedResponse {
 
     public int getColNum() {
         return _colNum;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer("FeedResponse{");
+        sb.append("_statusCode=").append(_statusCode);
+        sb.append(", _message='").append(_message).append('\'');
+        sb.append(", _uploadID='").append(_uploadID).append('\'');
+        sb.append(", _unknownSchemaFields=").append(_unknownSchemaFields);
+        sb.append(", _fieldErrors=").append(_fieldErrors);
+        sb.append(", _rowNum=").append(_rowNum);
+        sb.append(", _colNum=").append(_colNum);
+        sb.append('}');
+        return sb.toString();
     }
 }

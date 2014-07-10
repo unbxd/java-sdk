@@ -5,15 +5,11 @@ import com.unbxd.client.search.exceptions.SearchException;
 import com.unbxd.client.search.response.SearchResponse;
 import org.apache.commons.lang.StringUtils;
 import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
-import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.map.JsonMappingException;
+import org.apache.log4j.Logger;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -31,7 +27,7 @@ import java.util.*;
  */
 public class SearchClient {
 
-    private static final Logger LOG = LoggerFactory.getLogger(SearchClient.class);
+    private static final Logger LOG = Logger.getLogger(SearchClient.class);
 
     public enum SortDir{
         ASC,
@@ -206,16 +202,7 @@ public class SearchClient {
                 LOG.error(responseText);
                 throw new SearchException(responseText);
             }
-        } catch (JsonParseException e) {
-            LOG.error(e.getMessage(), e);
-            throw new SearchException(e);
-        } catch (JsonMappingException e) {
-            LOG.error(e.getMessage(), e);
-            throw new SearchException(e);
-        } catch (ClientProtocolException e) {
-            LOG.error(e.getMessage(), e);
-            throw new SearchException(e);
-        } catch (IOException e) {
+        } catch (Exception e) {
             LOG.error(e.getMessage(), e);
             throw new SearchException(e);
         }

@@ -26,12 +26,16 @@ public class FeedFieldError {
     protected FeedFieldError(Map<String, Object> params) {
         this._fieldName = (String) params.get("fieldName");
         this._fieldValue = params.get("fieldValue");
-        this._dataType = DataType.valueOf((String) params.get("dataType"));
-        this._multivalued = (Boolean) params.get("multiValue");
+        this._dataType = DataType.fromString((String) params.get("dataType"));
+        this._multivalued = Boolean.parseBoolean((String) params.get("multiValue"));
         this._errorCode = (Integer) params.get("errorCode");
         this._message = (String) params.get("message");
-        this._rowNum = (Integer) params.get("rowNum");
-        this._colNum = (Integer) params.get("colNum");
+
+        if(params.get("rowNum") != null)
+            this._rowNum = Integer.parseInt((String) params.get("rowNum"));
+
+        if(params.get("colNum") != null)
+            this._colNum = Integer.parseInt((String) params.get("colNum"));
     }
 
     public String getFieldName() {
@@ -64,5 +68,20 @@ public class FeedFieldError {
 
     public int getColNum() {
         return _colNum;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuffer sb = new StringBuffer("FeedFieldError{");
+        sb.append("_fieldName='").append(_fieldName).append('\'');
+        sb.append(", _fieldValue=").append(_fieldValue);
+        sb.append(", _dataType=").append(_dataType);
+        sb.append(", _multivalued=").append(_multivalued);
+        sb.append(", _errorCode=").append(_errorCode);
+        sb.append(", _message='").append(_message).append('\'');
+        sb.append(", _rowNum=").append(_rowNum);
+        sb.append(", _colNum=").append(_colNum);
+        sb.append('}');
+        return sb.toString();
     }
 }

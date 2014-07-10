@@ -8,11 +8,10 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.log4j.Logger;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -30,7 +29,7 @@ import java.util.Map;
  */
 public class RecommendationsClient {
 
-    private static final Logger LOG = LoggerFactory.getLogger(RecommendationsClient.class);
+    private static final Logger LOG = Logger.getLogger(RecommendationsClient.class);
 
     private static final String __encoding = "UTF-8";
 

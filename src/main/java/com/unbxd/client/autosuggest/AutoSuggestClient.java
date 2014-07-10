@@ -8,11 +8,10 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.log4j.Logger;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -30,7 +29,7 @@ import java.util.Map;
  */
 public class AutoSuggestClient {
 
-    private static final Logger LOG = LoggerFactory.getLogger(AutoSuggestClient.class);
+    private static final Logger LOG = Logger.getLogger(AutoSuggestClient.class);
 
     private static final String __encoding = "UTF-8";
 
@@ -40,7 +39,6 @@ public class AutoSuggestClient {
 
     private String query;
     private int bucketCount;
-    private int bucketSize;
     private int popularProductsCount;
     private int keywordSuggestionsCount;
     private int topQueriesCount;
@@ -51,7 +49,6 @@ public class AutoSuggestClient {
         this.secure = secure;
 
         this.bucketCount = -1;
-        this.bucketSize = -1;
         this.popularProductsCount = -1;
         this.keywordSuggestionsCount = -1;
         this.topQueriesCount = -1;
@@ -69,12 +66,6 @@ public class AutoSuggestClient {
 
     public AutoSuggestClient setBucketCount(int bucketCount) {
         this.bucketCount = bucketCount;
-
-        return this;
-    }
-
-    public AutoSuggestClient setBucketSize(int bucketSize) {
-        this.bucketSize = bucketSize;
 
         return this;
     }
@@ -109,10 +100,6 @@ public class AutoSuggestClient {
 
             if(bucketCount != -1){
                 sb.append("&buckets.count=" + URLEncoder.encode(bucketCount + "", __encoding));
-            }
-
-            if(bucketSize != -1){
-                sb.append("&buckets.size=" + URLEncoder.encode(bucketSize + "", __encoding));
             }
 
             if(popularProductsCount != -1){
