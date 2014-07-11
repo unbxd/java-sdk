@@ -20,6 +20,8 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.*;
 import java.util.*;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 /**
  * Created with IntelliJ IDEA.
@@ -154,6 +156,39 @@ public class FeedClient {
         return this;
     }
 
+    private File zipIt(File inFile) throws IOException {
+        byte[] buffer = new byte[1024];
+
+        ZipOutputStream zos = null;
+        FileInputStream in = null;
+        try{
+            in = new FileInputStream(inFile);
+
+            File file = File.createTempFile(siteKey, ".zip");
+            FileOutputStream fos = new FileOutputStream(file);
+            zos = new ZipOutputStream(fos);
+            ZipEntry ze= new ZipEntry(inFile.getName());
+            zos.putNextEntry(ze);
+
+            int len;
+            while ((len = in.read(buffer)) > 0) {
+                zos.write(buffer, 0, len);
+            }
+
+            in.close();
+            zos.closeEntry();
+
+            return file;
+        }finally {
+            //remember close it
+            if(zos != null)
+                zos.close();
+
+            if(in != null)
+                in.close();
+        }
+    }
+
     // Uploads the products. Has to handle file creation etc.
     public FeedResponse push(boolean isFullImport) throws FeedUploadException {
         CloseableHttpClient httpClient = HttpClients.custom().setConnectionManager(ConnectionManager.getConnectionManager()).build();
@@ -164,16 +199,24 @@ public class FeedClient {
             long t = new Date().getTime();
 
             File file = File.createTempFile(siteKey, ".xml");
-            FileOutputStream fos = new FileOutputStream(file);
+            FileOutputStream fos = null;
+            try{
+                fos = new FileOutputStream(file);
 
-            TransformerFactory tFactory = TransformerFactory.newInstance();
-            Transformer transformer = tFactory.newTransformer();
+                TransformerFactory tFactory = TransformerFactory.newInstance();
+                Transformer transformer = tFactory.newTransformer();
 
-            DOMSource source = new DOMSource(doc);
-            StreamResult result = new StreamResult(fos);
-            transformer.transform(source, result);
+                DOMSource source = new DOMSource(doc);
+                StreamResult result = new StreamResult(fos);
+                transformer.transform(source, result);
+            }finally {
+                if(fos != null)
+                    fos.close();
+            }
 
-            LOG.debug("Stored at : " + file.getAbsolutePath());
+            File zipFile = this.zipIt(file);
+
+            LOG.debug("Stored at : " + zipFile.getAbsolutePath());
 
             String url = getFeedUrl();
             if(isFullImport){
@@ -183,7 +226,7 @@ public class FeedClient {
             HttpPost post = new HttpPost(url);
 
             MultipartEntityBuilder entity = MultipartEntityBuilder.create();
-            entity.addPart("file", new FileBody(file));
+            entity.addPart("file", new FileBody(zipFile));
             post.setEntity(entity.build());
 
             HttpResponse response = httpClient.execute(post);

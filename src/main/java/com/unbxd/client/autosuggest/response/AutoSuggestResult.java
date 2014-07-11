@@ -25,4 +25,8 @@ public class AutoSuggestResult {
         return this._attributes.get(fieldName);
     }
 
+    public String getSuggestion(){
+        return (String) this.getAttribute("autosuggest");
+    }
+
 }
