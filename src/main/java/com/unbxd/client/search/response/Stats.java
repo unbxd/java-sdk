@@ -22,10 +22,17 @@ public class Stats {
         }
     }
 
+    /**
+     * @return Map of Field --> {@link Stat}
+     */
     public Map<String, Stat> getStats(){
         return this._stats;
     }
 
+    /**
+     * @param fieldName
+     * @return Stat for the field name
+     */
     public Stat getStat(String fieldName){
         return this._stats.get(fieldName);
     }

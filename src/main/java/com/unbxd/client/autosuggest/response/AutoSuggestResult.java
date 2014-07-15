@@ -17,14 +17,24 @@ public class AutoSuggestResult {
         this._attributes = params;
     }
 
+    /**
+     * @return Attributes of the product
+     */
     public Map<String, Object> getAttributes(){
         return this._attributes;
     }
 
+    /**
+     * @param fieldName
+     * @return Attribute of the product for given field name
+     */
     public Object getAttribute(String fieldName){
         return this._attributes.get(fieldName);
     }
 
+    /**
+     * @return Get Suggestion
+     */
     public String getSuggestion(){
         return (String) this.getAttribute("autosuggest");
     }

@@ -8,7 +8,8 @@ import java.util.Map;
  * User: sourabh
  * Date: 08/07/14
  * Time: 6:17 PM
- * To change this template use File | Settings | File Templates.
+ *
+ * Corresponds to recommendations API response
  */
 public class RecommendationResponse {
 
@@ -37,22 +38,37 @@ public class RecommendationResponse {
         }
     }
 
+    /**
+     * @return Status Code. 200 if OK.
+     */
     public int getStatusCode(){
         return this._statusCode;
     }
 
+    /**
+     * @return Error code in case of an error.
+     */
     public int getErrorCode(){
         return this._errorCode;
     }
 
+    /**
+     * @return OK if successfull. Error message otherwise
+     */
     public String getMessage(){
         return this._message;
     }
 
+    /**
+     * @return Number of results in the response.
+     */
     public int getTotalResultsCount(){
         return this._totalResultsCount;
     }
 
+    /**
+     * @return Results. Refer {@link RecommendationResults}
+     */
     public RecommendationResults getResults(){
         return this._results;
     }

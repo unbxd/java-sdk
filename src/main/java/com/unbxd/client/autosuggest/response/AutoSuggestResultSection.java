@@ -30,10 +30,16 @@ public class AutoSuggestResultSection {
         this._resultsCount++;
     }
 
+    /**
+     * @return {@link AutoSuggestType}
+     */
     public AutoSuggestType getType(){
         return this._type;
     }
 
+    /**
+     * @return Number of results
+     */
     public int getResultsCount(){
         return this._resultsCount;
     }
@@ -45,6 +51,9 @@ public class AutoSuggestResultSection {
         return this._results.get(i);
     }
 
+    /**
+     * @return List of Auto suggest results. Refer {@link AutoSuggestResult}
+     */
     public List<AutoSuggestResult> getResults(){
         return this._results;
     }

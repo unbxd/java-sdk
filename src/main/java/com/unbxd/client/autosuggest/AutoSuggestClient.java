@@ -25,7 +25,8 @@ import java.util.Map;
  * User: sourabh
  * Date: 08/07/14
  * Time: 5:32 PM
- * To change this template use File | Settings | File Templates.
+ *
+ * Client class for calling AutoSuggest APIs
  */
 public class AutoSuggestClient {
 
@@ -43,7 +44,8 @@ public class AutoSuggestClient {
     private int keywordSuggestionsCount;
     private int topQueriesCount;
 
-    public AutoSuggestClient(String siteKey, String apiKey, boolean secure) {
+
+    protected AutoSuggestClient(String siteKey, String apiKey, boolean secure) {
         this.siteKey = siteKey;
         this.apiKey = apiKey;
         this.secure = secure;
@@ -58,30 +60,55 @@ public class AutoSuggestClient {
         return (secure ? "https://" : "http://") + siteKey + ".search.unbxdapi.com/" + apiKey + "/autosuggest?wt=json";
     }
 
+    /**
+     * Gets autosuggest results for query
+     * @param query
+     * @return this
+     */
     public AutoSuggestClient autosuggest(String query){
         this.query = query;
 
         return this;
     }
 
+    /**
+     * Sets number of buckets to be returned in results
+     * @param bucketCount
+     * @return this
+     */
     public AutoSuggestClient setBucketCount(int bucketCount) {
         this.bucketCount = bucketCount;
 
         return this;
     }
 
+    /**
+     * Sets number of popular products to be returned in results
+     * @param popularProductsCount
+     * @return this
+     */
     public AutoSuggestClient setPopularProductsCount(int popularProductsCount) {
         this.popularProductsCount = popularProductsCount;
 
         return this;
     }
 
+    /**
+     * Sets number of keyword suggestions to be returned in results
+     * @param keywordSuggestionsCount
+     * @return this
+     */
     public AutoSuggestClient setKeywordSuggestionsCount(int keywordSuggestionsCount) {
         this.keywordSuggestionsCount = keywordSuggestionsCount;
 
         return this;
     }
 
+    /**
+     * Sets number of popular queries to be returned in results
+     * @param topQueriesCount
+     * @return this
+     */
     public AutoSuggestClient setTopQueriesCount(int topQueriesCount) {
         this.topQueriesCount = topQueriesCount;
 
@@ -121,6 +148,12 @@ public class AutoSuggestClient {
         }
     }
 
+    /**
+     * Executes Auto Suggest Query.
+     *
+     * @return {@link AutoSuggestResponse}
+     * @throws AutoSuggestException
+     */
     public AutoSuggestResponse execute() throws AutoSuggestException {
         CloseableHttpClient httpClient = HttpClients.custom().setConnectionManager(ConnectionManager.getConnectionManager()).build();
         try{

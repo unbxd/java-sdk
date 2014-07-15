@@ -20,10 +20,16 @@ public class BucketResult {
         this._results = new SearchResults((List<Map<String, Object>>) params.get("products"));
     }
 
+    /**
+     * @return Total number of results found.
+     */
     public int getTotalResultsCount(){
         return this._totalResultsCount;
     }
 
+    /**
+     * @return Results in this bucket. Refer {@link SearchResults}
+     */
     public SearchResults getResults(){
         return this._results;
     }

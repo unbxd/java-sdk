@@ -14,7 +14,10 @@ import com.unbxd.client.search.SearchClientFactory;
  * User: sourabh
  * Date: 07/07/14
  * Time: 3:21 PM
- * To change this template use File | Settings | File Templates.
+ *
+ * http://unbxd.com/docs/
+ *
+ * Class to configure and retrieve clients.
  */
 public class Unbxd {
 
@@ -27,6 +30,14 @@ public class Unbxd {
 
     private Unbxd(){}
 
+    /**
+     * Configure Unbxd Client. This method should be called while initializing you application.
+     * If you don't know the configuration details please get in touch with support@unbxd.com
+     *
+     * @param siteKey The Unique Identifier for Site created on Unbxd Platform
+     * @param apiKey API key for calling read APIs
+     * @param secretKey API key for calling Feed APIs
+     */
     public static void configure(String siteKey, String apiKey, String secretKey){
         Unbxd.siteKey = siteKey;
         Unbxd.apiKey = apiKey;
@@ -35,33 +46,58 @@ public class Unbxd {
         _configured = true;
     }
 
+    /**
+     * Configure Unbxd Client. This method should be called while initializing you application.
+     * If you don't know the configuration details please get in touch with support@unbxd.com
+     *
+     * @param siteKey The Unique Identifier for Site created on Unbxd Platform
+     * @param apiKey API key for calling read APIs
+     * @param secretKey API key for calling Feed APIs
+     * @param secure True to use HTTPS while making REST API calls
+     */
     public static void configure(String siteKey, String apiKey, String secretKey, boolean secure){
         Unbxd.configure(siteKey, apiKey, secretKey);
         Unbxd.secure = secure;
     }
 
-    // Should return a new FeedClient
+    /**
+     * Should return a new Feed Client
+     * @return {@link FeedClient}
+     * @throws ConfigException
+     */
     public static FeedClient getFeedClient() throws ConfigException {
         if(!_configured)
             throw new ConfigException("Please configure first with Unbxd.configure()");
         return FeedClientFactory.getFeedClient(siteKey, secretKey, secure);
     }
 
-    // Should return a new SearchClient
+    /**
+     * Should return a new Search Client
+     * @return {@link SearchClient}
+     * @throws ConfigException
+     */
     public static SearchClient getSearchClient() throws ConfigException {
         if(!_configured)
             throw new ConfigException("Please configure first with Unbxd.configure()");
         return SearchClientFactory.getSearchClient(siteKey, apiKey, secure);
     }
 
-    // Should return a new AutoSuggestClient
+    /**
+     * Should return a new Autosuggest Client
+     * @return {@link AutoSuggestClient}
+     * @throws ConfigException
+     */
     public static AutoSuggestClient getAutoSuggestClient() throws ConfigException {
         if(!_configured)
             throw new ConfigException("Please configure first with Unbxd.configure()");
         return AutoSuggestClientFactory.getAutoSuggestClient(siteKey, apiKey, secure);
     }
 
-    // Should return a new RecommenderClient
+    /**
+     * Should return a new Recommendations Client
+     * @return {@link RecommendationsClient}
+     * @throws ConfigException
+     */
     public static RecommendationsClient getRecommendationsClient() throws ConfigException {
         if(!_configured)
             throw new ConfigException("Please configure first with Unbxd.configure()");

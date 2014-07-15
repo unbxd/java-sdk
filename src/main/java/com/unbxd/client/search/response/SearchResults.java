@@ -25,6 +25,9 @@ public class SearchResults {
         }
     }
 
+    /**
+     * @return Number of results
+     */
     public int getResultsCount(){
         return _resultsCount;
     }
@@ -36,6 +39,9 @@ public class SearchResults {
         return this._results.get(i);
     }
 
+    /**
+     * @return List of products. Refer {@link SearchResult}
+     */
     public List<SearchResult> getResults(){
         return _results;
     }

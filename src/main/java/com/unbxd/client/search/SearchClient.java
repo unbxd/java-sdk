@@ -23,7 +23,8 @@ import java.util.*;
  * User: sourabh
  * Date: 08/07/14
  * Time: 10:55 AM
- * To change this template use File | Settings | File Templates.
+ *
+ * Client class for calling Search APIs
  */
 public class SearchClient {
 
@@ -70,6 +71,12 @@ public class SearchClient {
         return (secure ? "https://" : "http://") + siteKey + ".search.unbxdapi.com/" + apiKey + "/browse?wt=json";
     }
 
+    /**
+     * Searches for a query and appends the query parameters in the call.
+     * @param query
+     * @param queryParams
+     * @return this
+     */
     public SearchClient search(String query, Map<String, String> queryParams){
         this.query = query;
         this.queryParams = queryParams;
@@ -77,6 +84,13 @@ public class SearchClient {
         return this;
     }
 
+    /**
+     * Searches for a query, appends the query parameters in the call and responds with bucketed results.
+     * @param query
+     * @param bucketField Field on which buckets have to created.
+     * @param queryParams
+     * @return this
+     */
     public SearchClient bucket(String query, String bucketField, Map<String, String> queryParams){
         this.query = query;
         this.queryParams = queryParams;
@@ -85,6 +99,12 @@ public class SearchClient {
         return this;
     }
 
+    /**
+     * Calls for browse query and fetches results for given nodeId
+     * @param nodeId
+     * @param queryParams
+     * @return this
+     */
     public SearchClient browse(String nodeId, Map<String, String> queryParams){
         this.categoryIds = Arrays.asList(nodeId);
         this.queryParams = queryParams;
@@ -92,7 +112,13 @@ public class SearchClient {
         return this;
     }
 
-    // Has to be used when one node has multiple parents. All the node ids will be ANDed
+    /**
+     * Calls for browse query and fetches results for given nodeIds.
+     * Has to be used when one node has multiple parents. All the node ids will be ANDed
+     * @param nodeIds
+     * @param queryParams
+     * @return this
+     */
     public SearchClient browse(List<String> nodeIds, Map<String, String> queryParams){
         this.categoryIds = nodeIds;
         this.queryParams = queryParams;
@@ -100,25 +126,48 @@ public class SearchClient {
         return this;
     }
 
-    // Values in the same fields are ORed and different fields are ANDed
+    /**
+     * Filters the results
+     * Values in the same fields are ORed and different fields are ANDed
+     * @param fieldName
+     * @param values
+     * @return this
+     */
     public SearchClient addFilter(String fieldName, String... values){
         this.filters.put(fieldName, Arrays.asList(values));
 
         return this;
     }
 
+    /**
+     * Sorts the results on a field
+     * @param field
+     * @param sortDir
+     * @return this
+     */
     public SearchClient addSort(String field, SortDir sortDir){
         this.sorts.put(field, sortDir);
 
         return this;
     }
 
+    /**
+     * Sorts the results on a field in descending
+     * @param field
+     * @return this
+     */
     public SearchClient addSort(String field){
         this.addSort(field, SortDir.DESC);
 
         return this;
     }
 
+    /**
+     *
+     * @param pageNo
+     * @param pageSize
+     * @return this
+     */
     public SearchClient setPage(int pageNo, int pageSize){
         this.pageNo = pageNo;
         this.pageSize = pageSize;
@@ -178,6 +227,12 @@ public class SearchClient {
         }
     }
 
+    /**
+     * Executes search.
+     *
+     * @return {@link SearchResponse}
+     * @throws SearchException
+     */
     public SearchResponse execute() throws SearchException {
         CloseableHttpClient httpClient = HttpClients.custom().setConnectionManager(ConnectionManager.getConnectionManager()).build();
         try{

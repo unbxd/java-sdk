@@ -25,6 +25,9 @@ public class RecommendationResults {
         }
     }
 
+    /**
+     * @return Number of results
+     */
     public int getResultsCount(){
         return this._resultsCount;
     }
@@ -36,6 +39,9 @@ public class RecommendationResults {
         return this._results.get(i);
     }
 
+    /**
+     * @return List of products. Refer {@link RecommendationResult}
+     */
     public List<RecommendationResult> getResults(){
         return this._results;
     }

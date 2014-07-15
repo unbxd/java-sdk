@@ -25,7 +25,9 @@ import java.util.Map;
  * User: sourabh
  * Date: 08/07/14
  * Time: 6:09 PM
- * To change this template use File | Settings | File Templates.
+ *
+ * Client class for calling Recommendation APIs.
+ *
  */
 public class RecommendationsClient {
 
@@ -67,6 +69,11 @@ public class RecommendationsClient {
         return (secure ? "https://" : "http://") + "apac-recommendations.unbxdapi.com/v1.0/" + apiKey + "/" + siteKey + "/";
     }
 
+    /**
+     * Get Recently viewed items for the user : uid
+     * @param uid value of the cookie : "unbxd.userId"
+     * @return this
+     */
     public RecommendationsClient getRecentlyViewed(String uid){
         this._boxType = RecommenderBoxType.RECENTLY_VIEWED;
         this.uid = uid;
@@ -74,6 +81,12 @@ public class RecommendationsClient {
         return this;
     }
 
+    /**
+     * Get products recommended for user : uid
+     * @param uid value of the cookie : "unbxd.userId"
+     * @param ip IP address if the user for localization of results
+     * @return this
+     */
     public RecommendationsClient getRecommendedForYou(String uid, String ip){
         this._boxType = RecommenderBoxType.RECOMMENDED_FOR_YOU;
         this.uid = uid;
@@ -82,6 +95,12 @@ public class RecommendationsClient {
         return this;
     }
 
+    /**
+     * Get More products like product : uniqueId
+     * @param uniqueId Unique Id of the product
+     * @param uid value of the cookie : "unbxd.userId"
+     * @return this
+     */
     public RecommendationsClient getMoreLikeThis(String uniqueId, String uid){
         this._boxType = RecommenderBoxType.MORE_LIKE_THESE;
         this.uid = uid;
@@ -90,6 +109,12 @@ public class RecommendationsClient {
         return this;
     }
 
+    /**
+     * Get products which were also viewed by users who viewed the product : uniqueId
+     * @param uniqueId Unique Id of the product
+     * @param uid value of the cookie : "unbxd.userId"
+     * @return this
+     */
     public RecommendationsClient getAlsoViewed(String uniqueId, String uid){
         this._boxType = RecommenderBoxType.ALSO_VIEWED;
         this.uid = uid;
@@ -98,6 +123,12 @@ public class RecommendationsClient {
         return this;
     }
 
+    /**
+     * Get products which were also bought by users who bought the product : uniqueId
+     * @param uniqueId Unique Id of the product
+     * @param uid value of the cookie : "unbxd.userId"
+     * @return this
+     */
     public RecommendationsClient getAlsoBought(String uniqueId, String uid){
         this._boxType = RecommenderBoxType.ALSO_BOUGHT;
         this.uid = uid;
@@ -106,6 +137,12 @@ public class RecommendationsClient {
         return this;
     }
 
+    /**
+     * Get Top Selling products
+     * @param uid value of the cookie : "unbxd.userId"
+     * @param ip IP address if the user for localization of results
+     * @return this
+     */
     public RecommendationsClient getTopSellers(String uid, String ip){
         this._boxType = RecommenderBoxType.TOP_SELLERS;
         this.uid = uid;
@@ -114,6 +151,13 @@ public class RecommendationsClient {
         return this;
     }
 
+    /**
+     * Get Top Selling products within this category
+     * @param category name of the category
+     * @param uid value of the cookie : "unbxd.userId"
+     * @param ip IP address if the user for localization of results
+     * @return this
+     */
     public RecommendationsClient getCategoryTopSellers(String category, String uid, String ip){
         this._boxType = RecommenderBoxType.CATEGORY_TOP_SELLERS;
         this.uid = uid;
@@ -123,6 +167,13 @@ public class RecommendationsClient {
         return this;
     }
 
+    /**
+     * Get Top Selling products within this brand
+     * @param brand name of the brand
+     * @param uid value of the cookie : "unbxd.userId"
+     * @param ip IP address if the user for localization of results
+     * @return this
+     */
     public RecommendationsClient getBrandTopSellers(String brand, String uid, String ip){
         this._boxType = RecommenderBoxType.BRAND_TOP_SELLERS;
         this.uid = uid;
@@ -132,6 +183,13 @@ public class RecommendationsClient {
         return this;
     }
 
+    /**
+     * Get Top Selling products among products similar to this product
+     * @param uniqueId Unique Id of the product
+     * @param uid value of the cookie : "unbxd.userId"
+     * @param ip IP address if the user for localization of results
+     * @return this
+     */
     public RecommendationsClient getPDPTopSellers(String uniqueId, String uid, String ip){
         this._boxType = RecommenderBoxType.PDP_TOP_SELLERS;
         this.uid = uid;
@@ -141,6 +199,12 @@ public class RecommendationsClient {
         return this;
     }
 
+    /**
+     * Get recommendations based on the products added in cart by the user : uid
+     * @param uid value of the cookie : "unbxd.userId"
+     * @param ip IP address if the user for localization of results
+     * @return this
+     */
     public RecommendationsClient getCartRecommendations(String uid, String ip){
         this._boxType = RecommenderBoxType.CART_RECOMMEND;
         this.uid = uid;
@@ -194,6 +258,11 @@ public class RecommendationsClient {
         }
     }
 
+    /**
+     * Executes a recommendations call
+     * @return {@link RecommendationResponse}
+     * @throws RecommendationsException
+     */
     public RecommendationResponse execute() throws RecommendationsException {
         CloseableHttpClient httpClient = HttpClients.custom().setConnectionManager(ConnectionManager.getConnectionManager()).build();
         try{

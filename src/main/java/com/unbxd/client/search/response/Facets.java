@@ -31,14 +31,24 @@ public class Facets {
         }
     }
 
+    /**
+     * @return List of {@link Facet}
+     */
     public List<Facet> getFacets(){
         return this._facets;
     }
 
+    /**
+     * @return Map of field --> {@link Facet}
+     */
     public Map<String, Facet> getFacetsAsMap(){
         return this._facetsMap;
     }
 
+    /**
+     * @param facetName
+     * @return Facet for given field name
+     */
     public Facet getFacet(String facetName){
         return this._facetsMap.get(facetName);
     }

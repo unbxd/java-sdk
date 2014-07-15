@@ -25,7 +25,6 @@ public class Stat {
         this._mean = ((Number)params.get("mean")).doubleValue();
     }
 
-
     public int getCount(){
         return this._count;
     }

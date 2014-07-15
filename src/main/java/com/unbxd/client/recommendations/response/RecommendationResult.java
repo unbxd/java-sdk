@@ -19,14 +19,24 @@ public class RecommendationResult {
         this._uniqueId = (String) _attributes.get("uniqueId");
     }
 
+    /**
+     * @return Attributes of the product
+     */
     public Map<String, Object> getAttributes(){
         return this._attributes;
     }
 
+    /**
+     * @return Unique Id of the product
+     */
     public String getUniqueId(){
         return this._uniqueId;
     }
 
+    /**
+     * @param fieldName
+     * @return Attribute of the product for given field name
+     */
     public Object getAttribute(String fieldName){
         return this._attributes.get(fieldName);
     }

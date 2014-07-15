@@ -29,9 +29,16 @@ public class Facet {
         }
     }
 
+    /**
+     * @return Facet name
+     */
     public String getName(){
         return this.name;
     }
+
+    /**
+     * @return Type of facet
+     */
     public String getType(){
         return this._type;
     }
@@ -51,6 +58,9 @@ public class Facet {
         }
     }
 
+    /**
+     * @return List of {@link FacetEntry}
+     */
     public List<FacetEntry> getEntries(){
         return this._facetEntries;
     }

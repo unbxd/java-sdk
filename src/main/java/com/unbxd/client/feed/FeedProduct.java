@@ -7,13 +7,19 @@ import java.util.*;
  * User: sourabh
  * Date: 07/07/14
  * Time: 4:54 PM
- * To change this template use File | Settings | File Templates.
+ *
+ * Represents a product being added/updates in feed
  */
 public class FeedProduct {
+    // Unique Id of the product. Generally corresponds to the SKU.
     private String uniqueId;
     private final Map<String, Object> _attributes;
     private List<Map<String, Object>> _associatedDocuments;
 
+    /**
+     * @param uniqueId
+     * @param attributes
+     */
     public FeedProduct(String uniqueId, Map<String, Object> attributes){
         if(attributes == null)
             attributes = new HashMap<String, Object>();
@@ -25,14 +31,23 @@ public class FeedProduct {
         this.uniqueId = uniqueId;
     }
 
+    /**
+     * @return Unique Id of the product
+     */
     public String getUniqueId() {
         return uniqueId;
     }
 
+    /**
+     * @return Product Attributes
+     */
     public Map<String, Object> getAttributes(){
         return _attributes;
     }
 
+    /**
+     * @return get list of associated products
+     */
     public List<Map<String, Object>> getAssociatedProducts(){
         return _associatedDocuments;
     }
@@ -41,6 +56,11 @@ public class FeedProduct {
         _associatedDocuments.add(product);
     }
 
+    /**
+     *
+     * @param key
+     * @return Attribute of the product
+     */
     public Object get(Object key) {
         return _attributes.get(key);
     }

@@ -69,42 +69,72 @@ public class SearchResponse {
         }
     }
 
+    /**
+     * @return  Status Code. 200 if OK.
+     */
     public int getStatusCode(){
         return this._statusCode;
     }
 
+    /**
+     * @return Error code in case of an error.
+     */
     public int getErrorCode(){
         return this._errorCode;
     }
 
+    /**
+     * @return OK if successfull. Error message otherwise
+     */
     public String getMessage(){
         return this._message;
     }
 
+    /**
+     * @return Time taken to query results in milliseconds
+     */
     public int getQueryTime(){
         return this._queryTime;
     }
 
+    /**
+     * @return Total number of results found.
+     */
     public int getTotalResultsCount(){
         return this._totalResultsCount;
     }
 
+    /**
+     * @return Results. Refer {@link SearchResults}
+     */
     public SearchResults getResults(){
         return this._results;
     }
 
+    /**
+     * @return Facets. Refer {@link Facets}
+     */
     public Facets getFacets(){
         return this._facets;
     }
 
+    /**
+     * @return Stats. Refer {@link Stats}
+     */
     public Stats getStats(){
         return this._stats;
     }
 
+    /**
+     * @return List of spell corrections in the order of relevance
+     */
     public List<String> getSpellCorrections(){
         return this._spellCorrections;
     }
 
+    /**
+     * @return Bucketed Response. Refer {@link BucketResults}
+     */
     public BucketResults getBuckets(){
         return this._buckets;
     }

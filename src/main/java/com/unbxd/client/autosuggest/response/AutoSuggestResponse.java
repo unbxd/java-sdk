@@ -40,26 +40,44 @@ public class AutoSuggestResponse {
         }
     }
 
+    /**
+     * @return Status Code. 200 if OK.
+     */
     public int getStatusCode(){
         return this._statusCode;
     }
 
+    /**
+     * @return Error code in case of an error.
+     */
     public int getErrorCode(){
         return this._errorCode;
     }
 
+    /**
+     * @return OK if successfull. Error message otherwise
+     */
     public String getMessage(){
         return this._message;
     }
 
+    /**
+     * @return Time taken to query results in milliseconds
+     */
     public int getQueryTime(){
         return this._queryTime;
     }
 
+    /**
+     * @return Total number of results found.
+     */
     public int getTotalResultsCount(){
         return this._totalResultsCount;
     }
 
+    /**
+     * @return Results. Refer {@link AutoSuggestResults}
+     */
     public AutoSuggestResults getResults(){
         return _results;
     }

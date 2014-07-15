@@ -28,22 +28,37 @@ public class AutoSuggestResults {
         }
     }
 
+    /**
+     * @return Get response in sections. Map {@link AutoSuggestType} --> @{@link AutoSuggestResultSection}
+     */
     public Map<AutoSuggestType, AutoSuggestResultSection> getResultSections(){
         return this._resultSections;
     }
 
+    /**
+     * @return Get suggestions in buckets
+     */
     public AutoSuggestResultSection getBuckets(){
         return this._resultSections.get(AutoSuggestType.IN_FIELD);
     }
 
+    /**
+     * @return Get Popular products
+     */
     public AutoSuggestResultSection getPopularProducts(){
         return this._resultSections.get(AutoSuggestType.POPULAR_PRODUCTS);
     }
 
+    /**
+     * @return Get suggestions based on keyword
+     */
     public AutoSuggestResultSection getKeywordSuggestions(){
         return this._resultSections.get(AutoSuggestType.KEYWORD_SUGGESTION);
     }
 
+    /**
+     * @return Get Top Queries
+     */
     public AutoSuggestResultSection getTopQueries(){
         return this._resultSections.get(AutoSuggestType.TOP_SEARCH_QUERIES);
     }

@@ -34,14 +34,24 @@ public class BucketResults {
         }
     }
 
+    /**
+     * @return Number of buckets in response
+     */
     public int getNumberOfBuckets(){
         return this._numberOfBuckets;
     }
 
+    /**
+     * @param value
+     * @return Bucket for the field value
+     */
     public BucketResult getBucket(String value){
         return this._bucketsMap.get(value);
     }
 
+    /**
+     * @return List of {@link BucketResult}
+     */
     public List<BucketResult> getBuckets(){
         return this._buckets;
     }
