@@ -39,7 +39,7 @@ public class AutoSuggestClient {
     private boolean secure;
 
     private String query;
-    private int bucketCount;
+    private int inFieldsCount;
     private int popularProductsCount;
     private int keywordSuggestionsCount;
     private int topQueriesCount;
@@ -50,7 +50,7 @@ public class AutoSuggestClient {
         this.apiKey = apiKey;
         this.secure = secure;
 
-        this.bucketCount = -1;
+        this.inFieldsCount = -1;
         this.popularProductsCount = -1;
         this.keywordSuggestionsCount = -1;
         this.topQueriesCount = -1;
@@ -72,12 +72,12 @@ public class AutoSuggestClient {
     }
 
     /**
-     * Sets number of buckets to be returned in results
-     * @param bucketCount
+     * Sets number of in_fields to be returned in results
+     * @param inFieldsCount
      * @return this
      */
-    public AutoSuggestClient setBucketCount(int bucketCount) {
-        this.bucketCount = bucketCount;
+    public AutoSuggestClient setInFieldsCount(int inFieldsCount) {
+        this.inFieldsCount = inFieldsCount;
 
         return this;
     }
@@ -125,8 +125,8 @@ public class AutoSuggestClient {
 
             }
 
-            if(bucketCount != -1){
-                sb.append("&buckets.count=" + URLEncoder.encode(bucketCount + "", __encoding));
+            if(inFieldsCount != -1){
+                sb.append("&inFields.count=" + URLEncoder.encode(inFieldsCount + "", __encoding));
             }
 
             if(popularProductsCount != -1){

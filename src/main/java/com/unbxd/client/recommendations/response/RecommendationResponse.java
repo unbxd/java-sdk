@@ -16,25 +16,26 @@ public class RecommendationResponse {
     private int _statusCode;
     private int _errorCode;
     private String _message;
+    private int _queryTime;
     private int _totalResultsCount;
     private RecommendationResults _results;
 
     public RecommendationResponse(Map<String, Object> params) {
-        if(params.containsKey("status"))
-            this._statusCode = (Integer) params.get("status");
-
-        this._totalResultsCount = (Integer) params.get("count");
-
-        if(params.containsKey("Recommendations")){
-            this._results = new RecommendationResults((List<Map<String, Object>>) params.get("Recommendations"));
-        }
-
         if(params.get("error") != null){
             Map<String, Object> error = (Map<String, Object>) params.get("error");
             this._errorCode = (Integer) error.get("code");
             this._message = (String) error.get("message");
         }else{
             this._message = "OK";
+
+            this._statusCode = (Integer) params.get("status");
+            this._queryTime = (Integer) params.get("queryTime");
+
+            this._totalResultsCount = (Integer) params.get("count");
+
+            if(params.containsKey("Recommendations")){
+                this._results = new RecommendationResults((List<Map<String, Object>>) params.get("Recommendations"));
+            }
         }
     }
 
@@ -57,6 +58,13 @@ public class RecommendationResponse {
      */
     public String getMessage(){
         return this._message;
+    }
+
+    /**
+     * @return Time taken to query results in milliseconds
+     */
+    public int getQueryTime(){
+        return this._queryTime;
     }
 
     /**
