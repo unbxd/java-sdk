@@ -3,6 +3,9 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
+.. toctree::
+   :maxdepth: 2
+
 Introduction
 ============
 
@@ -14,10 +17,7 @@ You will be able to do the following through this SDK:
 * Make Autosuggest calls
 * Make Recommendation calls
 
-For details you can refer to the source on `GitHub <https://github.com/unbxd/java-sdk>`_.
-
-.. toctree::
-   :maxdepth: 2
+For details you can refer to the source on `GitHub <https://github.com/unbxd/java-sdk>`_.	
 
 Adding the dependency
 =====================
