@@ -156,14 +156,22 @@ FeedResponse response = Unbxd.getFeedClient().updateProduct(new FeedProduct(&quo
 </div>
 <div class="section" id="understanding-feedresponse-object">
 <h2>Understanding FeedResponse Object<a class="headerlink" href="#understanding-feedresponse-object" title="Permalink to this headline">¶</a></h2>
-<p>FeedResponse object gives you information about the Feed Upload call.</p>
-<ul class="simple">
-<li>getStatusCode : 200 in case of success. Failure otherwise.</li>
-<li>getMessage : An error message when status code is not 200.</li>
-<li>getUploadID : an identifier for this upload</li>
-<li>getUnknownSchemaFields : fields whose schema was unknown if any</li>
-<li>getFieldErrors : errors that occured at a field level</li>
-</ul>
+<div class="highlight-python"><div class="highlight"><pre>response
+|
++-&gt; .getStatusCode() // 200 if success.
++-&gt; .getMessage() // Get error message if any
++-&gt; .getUploadID() // Id for the upload request
++-&gt; .getUnknownSchemaFields() // List of fields whose schema was unknown if any
++-&gt; .getFieldErrors() // Errors that occured at a field level
+        |
+        +-&gt; .getFieldName() // Name of the field
+        +-&gt; .getFieldValue() // Value of the field
+        +-&gt; .getDataType() // Data type of the field
+        +-&gt; .isMultivalued() // True if field is multivalued
+        +-&gt; .getErrorCode() // Error code
+        +-&gt; .getMessage() // Get error message
+</pre></div>
+</div>
 </div>
 </div>
 <div class="section" id="using-search-client">
@@ -215,12 +223,94 @@ SearchResponse response = Unbxd.getSearchClient()
 </div>
 <p>All other options are same as the Search call</p>
 </div>
+<div class="section" id="understanding-searchresponse">
+<h2>Understanding SearchResponse<a class="headerlink" href="#understanding-searchresponse" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre>response
+|
++-&gt; .getStatusCode() // 200 if success.
++-&gt; .getErrorCode() // error code
++-&gt; .getMessage() // Get error message if any
++-&gt; .getQueryTime() // Time taken to generate results
++-&gt; .getTotalResultsCount() // Total Number of results
++-&gt; .getResults() // Results
+        |
+        +-&gt; .getResultsCount() // Number of results present
+        +-&gt; .getAt(int i) // Get at index i
+                |
+        +-&gt; .getResults() // Get results as array()
+                |
+                +-&gt; .getUniqueId() // Get Unique Id of the product
+                +-&gt; .getAttributes() // Get attributes as map
+                +-&gt; .getAttribute(String fieldName) // Get attribute with name : fieldName
++-&gt; .getFacets() // facets
+        |
+        +-&gt; .getFacets() // Get facets as list
+                |
+        +-&gt; .getFacetsAsMap() // Get facets as list
+                |
+                +-&gt; .getName() // Name of the facet
+                +-&gt; .getType() // Type of the facet
+                +-&gt; .getEntries() // Get facet entries as list
+                        |
+                        +-&gt; .getTerm() // Get facet term
+                        +-&gt; .getCount() // Get facet count
++-&gt; .getStats() // Stats. Will be present only if query parameters had a stats parameter
+        |
+        +-&gt; .getStats() // Map of field and stats
+                |
+        +-&gt; .getStat(String fieldName) // Stats for field : fieldName
+                |
+                +-&gt; .getCount() // Count of all values
+                +-&gt; .getMin() // Minimum value
+                +-&gt; .getMax() // Maximum value
+                +-&gt; .getSum() // Sum of all values
+                +-&gt; .getMean() // Mean of all values
++-&gt; .getBuckets() // Get Buckets. Only present when a bucket call was made
+        |
+        +-&gt; .getNumberOfBuckets() // Number of buckets
+        +-&gt; .getBucket(String value) // Get Bucket for field value
+        +-&gt; .getBuckets() // List of buckets
+</pre></div>
+</div>
+</div>
 </div>
 <div class="section" id="using-autosuggest-client">
 <h1>Using AutoSuggest Client<a class="headerlink" href="#using-autosuggest-client" title="Permalink to this headline">¶</a></h1>
 <p>The following code snippet will make a autosuggest call with query &#8220;shi&#8221;:</p>
 <div class="highlight-python"><div class="highlight"><pre>AutoSuggestResponse response = Unbxd.getAutoSuggestClient().autosuggest(&quot;shi&quot;).execute();
 </pre></div>
+</div>
+<div class="section" id="understanding-autosuggestresponse">
+<h2>Understanding AutoSuggestResponse<a class="headerlink" href="#understanding-autosuggestresponse" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre>response
+|
++-&gt; .getStatusCode() // 200 if success.
++-&gt; .getErrorCode() // error code
++-&gt; .getMessage() // Get error message if any
++-&gt; .getQueryTime() // Time taken to generate suggestions
++-&gt; .getTotalResultsCount() // Number of suggestions
++-&gt; .getResults() // Results
+        |
+        +-&gt; .getResultSections() // Map of AutoSuggestType and AutoSuggestResultSection
+                |
+        +-&gt; .getInFieldSuggestions() // Get In Field Suggestions
+                |
+        +-&gt; .getPopularProducts() // Get Popular Products Suggestions
+                |
+        +-&gt; .getKeywordSuggestions() // Get Keyword Suggestions
+                |
+        +-&gt; .getTopQueries() // Get Suggested Top Queries
+                |
+                +-&gt; .getResultsCount() // Number of suggestions
+                +-&gt; .getAt(int i) // Get at index i
+                        |
+                +-&gt; .getResults() // Get suggestions as array()
+                        |
+                        +-&gt; .getSuggestion() // Get suggestion
+                        +-&gt; .getAttributes() // Get attributes as map
+                        +-&gt; .getAttribute(String fieldName) // Get attribute with name : fieldName
+</pre></div>
+</div>
 </div>
 </div>
 <div class="section" id="using-the-recommendations-client">
@@ -285,6 +375,27 @@ SearchResponse response = Unbxd.getSearchClient()
 </pre></div>
 </div>
 </div>
+<div class="section" id="understanding-recommendationresponse">
+<h2>Understanding RecommendationResponse<a class="headerlink" href="#understanding-recommendationresponse" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre>response
+|
++-&gt; .getStatusCode() // 200 if success.
++-&gt; .getErrorCode() // error code
++-&gt; .getQueryTime() // Time taken to generate recommendations
++-&gt; .getTotalResultsCount() // Number of recommendations
++-&gt; .getResults() // Recommendations
+        |
+        +-&gt; .getResultsCount() // Number of recommendations
+        +-&gt; .getAt(int i) // Get at index i
+                |
+        +-&gt; .getResults() // Get recommendations as array()
+                |
+                +-&gt; .getUniqueId() // Get Unique Id of the product
+                +-&gt; .getAttributes() // Get attributes as map
+                +-&gt; .getAttribute(String fieldName) // Get attribute with name : fieldName
+</pre></div>
+</div>
+</div>
 </div>
 
 
@@ -314,9 +425,13 @@ SearchResponse response = Unbxd.getSearchClient()
 <li><a class="reference internal" href="#making-a-search-call">Making a Search Call</a></li>
 <li><a class="reference internal" href="#making-a-bucketing-call">Making a Bucketing Call</a></li>
 <li><a class="reference internal" href="#making-a-browse-call">Making a Browse Call</a></li>
+<li><a class="reference internal" href="#understanding-searchresponse">Understanding SearchResponse</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#using-autosuggest-client">Using AutoSuggest Client</a></li>
+<li><a class="reference internal" href="#using-autosuggest-client">Using AutoSuggest Client</a><ul>
+<li><a class="reference internal" href="#understanding-autosuggestresponse">Understanding AutoSuggestResponse</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#using-the-recommendations-client">Using the Recommendations Client</a><ul>
 <li><a class="reference internal" href="#get-recently-viewed-products">Get Recently Viewed Products</a></li>
 <li><a class="reference internal" href="#get-reccommended-for-you-products">Get Reccommended For You Products</a></li>
@@ -328,6 +443,7 @@ SearchResponse response = Unbxd.getSearchClient()
 <li><a class="reference internal" href="#get-top-selling-products-within-a-brand">Get Top Selling Products within a Brand</a></li>
 <li><a class="reference internal" href="#get-top-selling-products-similar-to-a-product">Get Top Selling Products similar to a product</a></li>
 <li><a class="reference internal" href="#get-products-based-on-cart">Get Products based on Cart</a></li>
+<li><a class="reference internal" href="#understanding-recommendationresponse">Understanding RecommendationResponse</a></li>
 </ul>
 </li>
 </ul>

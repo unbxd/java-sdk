@@ -119,14 +119,23 @@ To delete an existing product you call do the following::
 Understanding FeedResponse Object
 *********************************
 
-FeedResponse object gives you information about the Feed Upload call. 
-
-* getStatusCode : 200 in case of success. Failure otherwise.
-* getMessage : An error message when status code is not 200.
-* getUploadID : an identifier for this upload
-* getUnknownSchemaFields : fields whose schema was unknown if any
-* getFieldErrors : errors that occured at a field level
-
+::
+	
+	response
+	|
+	+-> .getStatusCode() // 200 if success.
+	+-> .getMessage() // Get error message if any
+	+-> .getUploadID() // Id for the upload request
+	+-> .getUnknownSchemaFields() // List of fields whose schema was unknown if any
+	+-> .getFieldErrors() // Errors that occured at a field level
+		|
+		+-> .getFieldName() // Name of the field
+		+-> .getFieldValue() // Value of the field
+		+-> .getDataType() // Data type of the field
+		+-> .isMultivalued() // True if field is multivalued
+		+-> .getErrorCode() // Error code
+		+-> .getMessage() // Get error message
+			
 
 Using Search Client
 ===================
@@ -181,6 +190,57 @@ The following code snippet will make a browse call with category id "3"::
 
 All other options are same as the Search call
 
+Understanding SearchResponse
+************************************
+
+::
+	
+	response
+	|
+	+-> .getStatusCode() // 200 if success.
+	+-> .getErrorCode() // error code
+	+-> .getMessage() // Get error message if any
+	+-> .getQueryTime() // Time taken to generate results
+	+-> .getTotalResultsCount() // Total Number of results
+	+-> .getResults() // Results
+		|
+		+-> .getResultsCount() // Number of results present
+		+-> .getAt(int i) // Get at index i
+			|
+		+-> .getResults() // Get results as array()
+			|
+			+-> .getUniqueId() // Get Unique Id of the product
+			+-> .getAttributes() // Get attributes as map
+			+-> .getAttribute(String fieldName) // Get attribute with name : fieldName
+	+-> .getFacets() // facets
+		|
+		+-> .getFacets() // Get facets as list
+			|
+		+-> .getFacetsAsMap() // Get facets as list
+			|
+			+-> .getName() // Name of the facet
+			+-> .getType() // Type of the facet
+			+-> .getEntries() // Get facet entries as list
+				|
+				+-> .getTerm() // Get facet term
+				+-> .getCount() // Get facet count
+	+-> .getStats() // Stats. Will be present only if query parameters had a stats parameter
+		|
+		+-> .getStats() // Map of field and stats
+			|
+		+-> .getStat(String fieldName) // Stats for field : fieldName
+			|
+			+-> .getCount() // Count of all values
+			+-> .getMin() // Minimum value
+			+-> .getMax() // Maximum value
+			+-> .getSum() // Sum of all values
+			+-> .getMean() // Mean of all values
+	+-> .getBuckets() // Get Buckets. Only present when a bucket call was made
+		|
+		+-> .getNumberOfBuckets() // Number of buckets
+		+-> .getBucket(String value) // Get Bucket for field value
+		+-> .getBuckets() // List of buckets
+
 
 Using AutoSuggest Client
 ========================
@@ -188,6 +248,40 @@ Using AutoSuggest Client
 The following code snippet will make a autosuggest call with query "shi"::
 
 	AutoSuggestResponse response = Unbxd.getAutoSuggestClient().autosuggest("shi").execute();
+
+Understanding AutoSuggestResponse
+************************************
+
+::
+	
+	response
+	|
+	+-> .getStatusCode() // 200 if success.
+	+-> .getErrorCode() // error code
+	+-> .getMessage() // Get error message if any
+	+-> .getQueryTime() // Time taken to generate suggestions
+	+-> .getTotalResultsCount() // Number of suggestions
+	+-> .getResults() // Results
+		|
+		+-> .getResultSections() // Map of AutoSuggestType and AutoSuggestResultSection
+			|
+		+-> .getInFieldSuggestions() // Get In Field Suggestions
+			|
+		+-> .getPopularProducts() // Get Popular Products Suggestions
+			|
+		+-> .getKeywordSuggestions() // Get Keyword Suggestions
+			|
+		+-> .getTopQueries() // Get Suggested Top Queries
+			|
+			+-> .getResultsCount() // Number of suggestions
+			+-> .getAt(int i) // Get at index i
+				|
+			+-> .getResults() // Get suggestions as array()
+				|
+				+-> .getSuggestion() // Get suggestion
+				+-> .getAttributes() // Get attributes as map
+				+-> .getAttribute(String fieldName) // Get attribute with name : fieldName
+
 
 Using the Recommendations Client
 ================================
@@ -257,12 +351,32 @@ Get Top Selling Products similar to a product
 	RecommendationResponse response = Unbxd.getRecommendationsClient().getPDPTopSellers("sku1", uid, "100.0.0.1");  // uid is value of the cookie : "unbxd.userId"
 
 Get Products based on Cart
-*********************************************
+**************************
 	
 ::
 
 	RecommendationResponse response = Unbxd.getRecommendationsClient().getCartRecommendations(uid, "100.0.0.1");  // uid is value of the cookie : "unbxd.userId"
 
 
+Understanding RecommendationResponse
+************************************
 
+::
+	
+	response
+	|
+	+-> .getStatusCode() // 200 if success.
+	+-> .getErrorCode() // error code
+	+-> .getQueryTime() // Time taken to generate recommendations
+	+-> .getTotalResultsCount() // Number of recommendations
+	+-> .getResults() // Recommendations
+		|
+		+-> .getResultsCount() // Number of recommendations
+		+-> .getAt(int i) // Get at index i
+			|
+		+-> .getResults() // Get recommendations as array()
+			|
+			+-> .getUniqueId() // Get Unique Id of the product
+			+-> .getAttributes() // Get attributes as map
+			+-> .getAttribute(String fieldName) // Get attribute with name : fieldName
 
