@@ -38,7 +38,7 @@ public class AutoSuggestResults {
     /**
      * @return Get suggestions in buckets
      */
-    public AutoSuggestResultSection getBuckets(){
+    public AutoSuggestResultSection getInFieldSuggestions(){
         return this._resultSections.get(AutoSuggestType.IN_FIELD);
     }
 
