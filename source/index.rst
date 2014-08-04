@@ -24,15 +24,11 @@ Adding the dependency
 Add the following dependency in you pom.xml file::
 
 	<dependency>
-	  <groupId>com.unbxd</groupId>
-	  <artifactId>java-sdk</artifactId>
-	  <version>1.0</version>
+		<groupId>com.unbxd</groupId>
+		<artifactId>unbxd-java-sdk</artifactId>
+		<version>2.0</version>
 	</dependency>
-	<repository>
-	  <id>java-sdk</id>
-	  <name>Unbxd JAVA SDK</name>
-	  <url>https://raw.githubusercontent.com/unbxd/java-sdk/master/repository</url>
-	</repository>
+
 
 Configuration
 =============
