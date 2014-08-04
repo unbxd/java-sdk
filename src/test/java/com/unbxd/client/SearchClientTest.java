@@ -25,7 +25,7 @@ public class SearchClientTest extends TestCase{
         SearchResponse response = Unbxd.getSearchClient()
                 .search("*", queryParams)
                 .addFilter("color_fq","black")
-                .addFilter("Brand_fq", "Ralph Lauren")
+                .addFilter("brand_fq", "Ralph Lauren")
                 .addSort("price", SearchClient.SortDir.ASC)
                 .setPage(2, 5)
                 .execute();
@@ -51,7 +51,7 @@ public class SearchClientTest extends TestCase{
         SearchResponse response = Unbxd.getSearchClient()
                 .browse("1", queryParams)
                 .addFilter("color_fq","black")
-                .addFilter("Brand_fq", "Ralph Lauren")
+                .addFilter("brand_fq", "Ralph Lauren")
                 .addSort("price", SearchClient.SortDir.ASC)
                 .setPage(2, 5)
                 .execute();
@@ -77,7 +77,7 @@ public class SearchClientTest extends TestCase{
         SearchResponse response = Unbxd.getSearchClient()
                 .bucket("*", "category", queryParams)
                 .addFilter("color_fq","black")
-                .addFilter("Brand_fq", "Ralph Lauren")
+                .addFilter("brand_fq", "Ralph Lauren")
                 .addSort("price", SearchClient.SortDir.ASC)
                 .setPage(2, 5)
                 .execute();

@@ -25,7 +25,7 @@ public class RecommendationsClientTest extends TestCase{
         RecommendationResponse response = Unbxd.getRecommendationsClient().getMoreLikeThis("532062745e4016fd1c73b7a4", null).execute();
 
         Assert.assertNotNull(response);
-        Assert.assertEquals(0, response.getStatusCode());
+        Assert.assertEquals(200, response.getStatusCode());
         Assert.assertEquals("OK", response.getMessage());
         Assert.assertEquals(6, response.getTotalResultsCount());
         Assert.assertEquals(6, response.getResults().getResultsCount());
