@@ -57,7 +57,7 @@ public class AutoSuggestClient {
     }
 
     private String getAutoSuggestUrl(){
-        return (secure ? "https://" : "http://") + siteKey + ".search.unbxdapi.com/" + apiKey + "/autosuggest?wt=json";
+        return (secure ? "https://" : "http://") + "search.unbxdapi.com/" + apiKey + "/" + siteKey + "/autosuggest?wt=json";
     }
 
     /**
