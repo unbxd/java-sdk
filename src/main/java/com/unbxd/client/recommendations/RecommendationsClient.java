@@ -66,7 +66,7 @@ public class RecommendationsClient {
     }
 
     private String getRecommendationUrl(){
-        return (secure ? "https://" : "http://") + "apac-recommendations.unbxdapi.com/v1.0/" + apiKey + "/" + siteKey + "/";
+        return (secure ? "https://" : "http://") + "recommendations.unbxdapi.com/v1.0/" + apiKey + "/" + siteKey + "/";
     }
 
     /**
