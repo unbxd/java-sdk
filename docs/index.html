@@ -1,51 +1,159 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 
-<html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>Introduction &mdash; Unbxd JAVA SDK 1.0 documentation</title>
-    
-    <link rel="stylesheet" href="_static/default.css" type="text/css" />
-    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
-        VERSION:     '1.0',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true
-      };
-    </script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <link rel="top" title="Unbxd JAVA SDK 1.0 documentation" href="#" /> 
-  </head>
-  <body>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li><a href="#">Unbxd JAVA SDK 1.0 documentation</a> &raquo;</li> 
-      </ul>
-    </div>  
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Introduction &mdash; Unbxd JAVA SDK 1.0 documentation</title>
+  
 
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
-          <div class="body">
-            
-  <div class="toctree-wrapper compound">
-<ul class="simple">
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+    <link rel="top" title="Unbxd JAVA SDK 1.0 documentation" href="#"/> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-nav-search">
+        
+
+        
+          <a href="#" class="icon icon-home"> Unbxd JAVA SDK
+        
+
+        
+          
+          <img src="_static/logo-unbxd-new.png" class="logo" />
+        
+        </a>
+
+        
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+        
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+        
+          
+          
+              <!-- Local TOC -->
+              <div class="local-toc"><ul>
+<li><a class="reference internal" href="#">Introduction</a><ul>
+<li><a class="reference internal" href="#adding-the-dependency">Adding the dependency</a></li>
+<li><a class="reference internal" href="#configuration">Configuration</a></li>
+<li><a class="reference internal" href="#pushing-the-feed">Pushing the feed</a><ul>
+<li><a class="reference internal" href="#adding-products">Adding products</a><ul>
+<li><a class="reference internal" href="#marking-custom-field-as-multivalued">Marking custom field as multivalued</a></li>
+<li><a class="reference internal" href="#including-custom-field-in-auto-suggest">Including custom field in Auto-Suggest</a></li>
+<li><a class="reference internal" href="#flush-existing-product">Flush existing product</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#updating-products">Updating products</a></li>
+<li><a class="reference internal" href="#deleting-products">Deleting products</a></li>
+<li><a class="reference internal" href="#understanding-feedresponse-object">Understanding FeedResponse Object</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#using-search-client">Using Search Client</a><ul>
+<li><a class="reference internal" href="#making-a-search-call">Making a Search Call</a></li>
+<li><a class="reference internal" href="#making-a-bucketing-call">Making a Bucketing Call</a></li>
+<li><a class="reference internal" href="#making-a-browse-call">Making a Browse Call</a></li>
+<li><a class="reference internal" href="#understanding-searchresponse">Understanding SearchResponse</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#using-autosuggest-client">Using AutoSuggest Client</a><ul>
+<li><a class="reference internal" href="#understanding-autosuggestresponse">Understanding AutoSuggestResponse</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#using-the-recommendations-client">Using the Recommendations Client</a><ul>
+<li><a class="reference internal" href="#get-recently-viewed-products">Get Recently Viewed Products</a></li>
+<li><a class="reference internal" href="#get-reccommended-for-you-products">Get Reccommended For You Products</a></li>
+<li><a class="reference internal" href="#get-more-like-this-products">Get More Like This Products</a></li>
+<li><a class="reference internal" href="#get-also-viewed-products">Get Also Viewed Products</a></li>
+<li><a class="reference internal" href="#get-also-bought-products">Get Also Bought Products</a></li>
+<li><a class="reference internal" href="#get-top-selling-products">Get Top Selling Products</a></li>
+<li><a class="reference internal" href="#get-top-selling-products-within-a-category">Get Top Selling Products within a Category</a></li>
+<li><a class="reference internal" href="#get-top-selling-products-within-a-brand">Get Top Selling Products within a Brand</a></li>
+<li><a class="reference internal" href="#get-top-selling-products-similar-to-a-product">Get Top Selling Products similar to a product</a></li>
+<li><a class="reference internal" href="#get-products-based-on-cart">Get Products based on Cart</a></li>
+<li><a class="reference internal" href="#understanding-recommendationresponse">Understanding RecommendationResponse</a></li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </div>
-<div class="section" id="introduction">
+          
+        
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="#">Unbxd JAVA SDK</a>
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="#">Docs</a> &raquo;</li>
+      
+    <li>Introduction</li>
+      <li class="wy-breadcrumbs-aside">
+        
+          
+            <a href="_sources/index.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document">
+            
+  <div class="section" id="introduction">
 <h1>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h1>
 <p>This SDK will enable you to use full feature set of Unbxd APIs.
 You will be able to do the following through this SDK:</p>
@@ -56,9 +164,8 @@ You will be able to do the following through this SDK:</p>
 <li>Make Recommendation calls</li>
 </ul>
 <p>For details you can refer to the source on <a class="reference external" href="https://github.com/unbxd/java-sdk">GitHub</a>.</p>
-</div>
 <div class="section" id="adding-the-dependency">
-<h1>Adding the dependency<a class="headerlink" href="#adding-the-dependency" title="Permalink to this headline">¶</a></h1>
+<h2>Adding the dependency<a class="headerlink" href="#adding-the-dependency" title="Permalink to this headline">¶</a></h2>
 <p>Add the following dependency in you pom.xml file:</p>
 <div class="highlight-python"><div class="highlight"><pre>&lt;dependency&gt;
         &lt;groupId&gt;com.unbxd&lt;/groupId&gt;
@@ -69,7 +176,7 @@ You will be able to do the following through this SDK:</p>
 </div>
 </div>
 <div class="section" id="configuration">
-<h1>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h1>
+<h2>Configuration<a class="headerlink" href="#configuration" title="Permalink to this headline">¶</a></h2>
 <p>The SDK must be initialized in the following manner:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">Unbxd</span><span class="o">.</span><span class="n">configure</span><span class="p">(</span><span class="s">&quot;Your Site ID&quot;</span><span class="p">,</span> <span class="s">&quot;Your API Key&quot;</span><span class="p">,</span> <span class="s">&quot;Your Secret Key&quot;</span><span class="p">);</span>
 </pre></div>
@@ -80,9 +187,9 @@ You will be able to do the following through this SDK:</p>
 </div>
 </div>
 <div class="section" id="pushing-the-feed">
-<h1>Pushing the feed<a class="headerlink" href="#pushing-the-feed" title="Permalink to this headline">¶</a></h1>
+<h2>Pushing the feed<a class="headerlink" href="#pushing-the-feed" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="adding-products">
-<h2>Adding products<a class="headerlink" href="#adding-products" title="Permalink to this headline">¶</a></h2>
+<h3>Adding products<a class="headerlink" href="#adding-products" title="Permalink to this headline">¶</a></h3>
 <p>The following lines of code would send a couple of products to Unbxd Servers:</p>
 <div class="highlight-python"><div class="highlight"><pre>Map&lt;String, Object&gt; product1 = new HashMap&lt;String, Object&gt;();
 product1.put(&quot;title&quot;, &quot;nice shoes&quot;); // Title of the product
@@ -107,21 +214,21 @@ FeedResponse response = Unbxd.getFeedClient()
 </div>
 <p>You can find the list of pre-configured fields here TODO. The above code adds a field &#8220;some-field&#8221; to the schema.</p>
 <div class="section" id="marking-custom-field-as-multivalued">
-<h3>Marking custom field as multivalued<a class="headerlink" href="#marking-custom-field-as-multivalued" title="Permalink to this headline">¶</a></h3>
+<h4>Marking custom field as multivalued<a class="headerlink" href="#marking-custom-field-as-multivalued" title="Permalink to this headline">¶</a></h4>
 <p>The custom field can be marked to allow multiple values like this:</p>
 <div class="highlight-python"><div class="highlight"><pre>.addSchema(&quot;some-field&quot;, DataType.TEXT, true, false) // Adds a custom field
 </pre></div>
 </div>
 </div>
 <div class="section" id="including-custom-field-in-auto-suggest">
-<h3>Including custom field in Auto-Suggest<a class="headerlink" href="#including-custom-field-in-auto-suggest" title="Permalink to this headline">¶</a></h3>
+<h4>Including custom field in Auto-Suggest<a class="headerlink" href="#including-custom-field-in-auto-suggest" title="Permalink to this headline">¶</a></h4>
 <p>The custom field can be marked to be included in Auto-Suggest like this:</p>
 <div class="highlight-python"><div class="highlight"><pre>.addSchema(&quot;some-field&quot;, DataType.TEXT, false, true) // Adds a custom field
 </pre></div>
 </div>
 </div>
 <div class="section" id="flush-existing-product">
-<h3>Flush existing product<a class="headerlink" href="#flush-existing-product" title="Permalink to this headline">¶</a></h3>
+<h4>Flush existing product<a class="headerlink" href="#flush-existing-product" title="Permalink to this headline">¶</a></h4>
 <p>If you wish to flush out all the existing products while indexing new products you need to call .push(true) like this:</p>
 <div class="highlight-python"><div class="highlight"><pre>FeedResponse response = Unbxd.getFeedClient()
                         .addSchema(&quot;some-field&quot;, DataType.TEXT) // Adds a custom field
@@ -133,7 +240,7 @@ FeedResponse response = Unbxd.getFeedClient()
 </div>
 </div>
 <div class="section" id="updating-products">
-<h2>Updating products<a class="headerlink" href="#updating-products" title="Permalink to this headline">¶</a></h2>
+<h3>Updating products<a class="headerlink" href="#updating-products" title="Permalink to this headline">¶</a></h3>
 <p>To update an existing product you call do the following:</p>
 <div class="highlight-python"><div class="highlight"><pre>Map&lt;String, Object&gt; product = new HashMap&lt;String, Object&gt;();
 product.put(&quot;title&quot;, &quot;new title&quot;);
@@ -143,14 +250,14 @@ FeedResponse response = Unbxd.getFeedClient().updateProduct(new FeedProduct(&quo
 </div>
 </div>
 <div class="section" id="deleting-products">
-<h2>Deleting products<a class="headerlink" href="#deleting-products" title="Permalink to this headline">¶</a></h2>
+<h3>Deleting products<a class="headerlink" href="#deleting-products" title="Permalink to this headline">¶</a></h3>
 <p>To delete an existing product you call do the following:</p>
 <div class="highlight-python"><div class="highlight"><pre>FeedResponse response = Unbxd.getFeedClient().deleteProduct(&quot;sku1&quot;).push(false);
 </pre></div>
 </div>
 </div>
 <div class="section" id="understanding-feedresponse-object">
-<h2>Understanding FeedResponse Object<a class="headerlink" href="#understanding-feedresponse-object" title="Permalink to this headline">¶</a></h2>
+<h3>Understanding FeedResponse Object<a class="headerlink" href="#understanding-feedresponse-object" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-python"><div class="highlight"><pre>response
 |
 +-&gt; .getStatusCode() // 200 if success.
@@ -170,9 +277,9 @@ FeedResponse response = Unbxd.getFeedClient().updateProduct(new FeedProduct(&quo
 </div>
 </div>
 <div class="section" id="using-search-client">
-<h1>Using Search Client<a class="headerlink" href="#using-search-client" title="Permalink to this headline">¶</a></h1>
+<h2>Using Search Client<a class="headerlink" href="#using-search-client" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="making-a-search-call">
-<h2>Making a Search Call<a class="headerlink" href="#making-a-search-call" title="Permalink to this headline">¶</a></h2>
+<h3>Making a Search Call<a class="headerlink" href="#making-a-search-call" title="Permalink to this headline">¶</a></h3>
 <p>The following code snippet will make a search call with query &#8220;shirts&#8221;:</p>
 <div class="highlight-python"><div class="highlight"><pre>SearchResponse response = Unbxd.getSearchClient().search(&quot;shirts&quot;, null).execute();
 </pre></div>
@@ -203,7 +310,7 @@ SearchResponse response = Unbxd.getSearchClient()
 </div>
 </div>
 <div class="section" id="making-a-bucketing-call">
-<h2>Making a Bucketing Call<a class="headerlink" href="#making-a-bucketing-call" title="Permalink to this headline">¶</a></h2>
+<h3>Making a Bucketing Call<a class="headerlink" href="#making-a-bucketing-call" title="Permalink to this headline">¶</a></h3>
 <p>The following code snippet will make a bucketing call with query &#8220;shirts&#8221; and bucket &#8220;category&#8221;:</p>
 <div class="highlight-python"><div class="highlight"><pre>SearchResponse response = Unbxd.getSearchClient().bucket(&quot;*&quot;, &quot;category&quot;, null).execute();
 </pre></div>
@@ -211,7 +318,7 @@ SearchResponse response = Unbxd.getSearchClient()
 <p>All other options are same as the Search call</p>
 </div>
 <div class="section" id="making-a-browse-call">
-<h2>Making a Browse Call<a class="headerlink" href="#making-a-browse-call" title="Permalink to this headline">¶</a></h2>
+<h3>Making a Browse Call<a class="headerlink" href="#making-a-browse-call" title="Permalink to this headline">¶</a></h3>
 <p>The following code snippet will make a browse call with category id &#8220;3&#8221;:</p>
 <div class="highlight-python"><div class="highlight"><pre>SearchResponse response = Unbxd.getSearchClient().browse(&quot;1&quot;, null).execute();
 </pre></div>
@@ -219,7 +326,7 @@ SearchResponse response = Unbxd.getSearchClient()
 <p>All other options are same as the Search call</p>
 </div>
 <div class="section" id="understanding-searchresponse">
-<h2>Understanding SearchResponse<a class="headerlink" href="#understanding-searchresponse" title="Permalink to this headline">¶</a></h2>
+<h3>Understanding SearchResponse<a class="headerlink" href="#understanding-searchresponse" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-python"><div class="highlight"><pre>response
 |
 +-&gt; .getStatusCode() // 200 if success.
@@ -270,13 +377,13 @@ SearchResponse response = Unbxd.getSearchClient()
 </div>
 </div>
 <div class="section" id="using-autosuggest-client">
-<h1>Using AutoSuggest Client<a class="headerlink" href="#using-autosuggest-client" title="Permalink to this headline">¶</a></h1>
+<h2>Using AutoSuggest Client<a class="headerlink" href="#using-autosuggest-client" title="Permalink to this headline">¶</a></h2>
 <p>The following code snippet will make a autosuggest call with query &#8220;shi&#8221;:</p>
 <div class="highlight-python"><div class="highlight"><pre>AutoSuggestResponse response = Unbxd.getAutoSuggestClient().autosuggest(&quot;shi&quot;).execute();
 </pre></div>
 </div>
 <div class="section" id="understanding-autosuggestresponse">
-<h2>Understanding AutoSuggestResponse<a class="headerlink" href="#understanding-autosuggestresponse" title="Permalink to this headline">¶</a></h2>
+<h3>Understanding AutoSuggestResponse<a class="headerlink" href="#understanding-autosuggestresponse" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-python"><div class="highlight"><pre>response
 |
 +-&gt; .getStatusCode() // 200 if success.
@@ -309,69 +416,69 @@ SearchResponse response = Unbxd.getSearchClient()
 </div>
 </div>
 <div class="section" id="using-the-recommendations-client">
-<h1>Using the Recommendations Client<a class="headerlink" href="#using-the-recommendations-client" title="Permalink to this headline">¶</a></h1>
+<h2>Using the Recommendations Client<a class="headerlink" href="#using-the-recommendations-client" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="get-recently-viewed-products">
-<h2>Get Recently Viewed Products<a class="headerlink" href="#get-recently-viewed-products" title="Permalink to this headline">¶</a></h2>
+<h3>Get Recently Viewed Products<a class="headerlink" href="#get-recently-viewed-products" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-python"><div class="highlight"><pre>RecommendationResponse response = Unbxd.getRecommendationsClient().getRecentlyViewed(uid); // uid is value of the cookie : &quot;unbxd.userId&quot;
 </pre></div>
 </div>
 </div>
 <div class="section" id="get-reccommended-for-you-products">
-<h2>Get Reccommended For You Products<a class="headerlink" href="#get-reccommended-for-you-products" title="Permalink to this headline">¶</a></h2>
+<h3>Get Reccommended For You Products<a class="headerlink" href="#get-reccommended-for-you-products" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-python"><div class="highlight"><pre>RecommendationResponse response = Unbxd.getRecommendationsClient().getRecommendedForYou(uid, &quot;100.0.0.1&quot;); // uid is value of the cookie : &quot;unbxd.userId&quot;
 </pre></div>
 </div>
 </div>
 <div class="section" id="get-more-like-this-products">
-<h2>Get More Like This Products<a class="headerlink" href="#get-more-like-this-products" title="Permalink to this headline">¶</a></h2>
+<h3>Get More Like This Products<a class="headerlink" href="#get-more-like-this-products" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-python"><div class="highlight"><pre>RecommendationResponse response = Unbxd.getRecommendationsClient().getMoreLikeThis(&quot;sku1&quot;, uid); // uid is value of the cookie : &quot;unbxd.userId&quot;
 </pre></div>
 </div>
 </div>
 <div class="section" id="get-also-viewed-products">
-<h2>Get Also Viewed Products<a class="headerlink" href="#get-also-viewed-products" title="Permalink to this headline">¶</a></h2>
+<h3>Get Also Viewed Products<a class="headerlink" href="#get-also-viewed-products" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-python"><div class="highlight"><pre>RecommendationResponse response = Unbxd.getRecommendationsClient().getAlsoViewed(&quot;sku1&quot;, uid); // uid is value of the cookie : &quot;unbxd.userId&quot;
 </pre></div>
 </div>
 </div>
 <div class="section" id="get-also-bought-products">
-<h2>Get Also Bought Products<a class="headerlink" href="#get-also-bought-products" title="Permalink to this headline">¶</a></h2>
+<h3>Get Also Bought Products<a class="headerlink" href="#get-also-bought-products" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-python"><div class="highlight"><pre>RecommendationResponse response = Unbxd.getRecommendationsClient().getAlsoBought(&quot;sku1&quot;, uid); // uid is value of the cookie : &quot;unbxd.userId&quot;
 </pre></div>
 </div>
 </div>
 <div class="section" id="get-top-selling-products">
-<h2>Get Top Selling Products<a class="headerlink" href="#get-top-selling-products" title="Permalink to this headline">¶</a></h2>
+<h3>Get Top Selling Products<a class="headerlink" href="#get-top-selling-products" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-python"><div class="highlight"><pre>RecommendationResponse response = Unbxd.getRecommendationsClient().getTopSellers(uid, &quot;100.0.0.1&quot;);  // uid is value of the cookie : &quot;unbxd.userId&quot;
 </pre></div>
 </div>
 </div>
 <div class="section" id="get-top-selling-products-within-a-category">
-<h2>Get Top Selling Products within a Category<a class="headerlink" href="#get-top-selling-products-within-a-category" title="Permalink to this headline">¶</a></h2>
+<h3>Get Top Selling Products within a Category<a class="headerlink" href="#get-top-selling-products-within-a-category" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-python"><div class="highlight"><pre>RecommendationResponse response = Unbxd.getRecommendationsClient().getCategoryTopSellers(&quot;Shoes&quot;, uid, &quot;100.0.0.1&quot;);  // uid is value of the cookie : &quot;unbxd.userId&quot;
 </pre></div>
 </div>
 </div>
 <div class="section" id="get-top-selling-products-within-a-brand">
-<h2>Get Top Selling Products within a Brand<a class="headerlink" href="#get-top-selling-products-within-a-brand" title="Permalink to this headline">¶</a></h2>
+<h3>Get Top Selling Products within a Brand<a class="headerlink" href="#get-top-selling-products-within-a-brand" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-python"><div class="highlight"><pre>RecommendationResponse response = Unbxd.getRecommendationsClient().getBrandTopSellers(&quot;Adidas&quot;, uid, &quot;100.0.0.1&quot;);  // uid is value of the cookie : &quot;unbxd.userId&quot;
 </pre></div>
 </div>
 </div>
 <div class="section" id="get-top-selling-products-similar-to-a-product">
-<h2>Get Top Selling Products similar to a product<a class="headerlink" href="#get-top-selling-products-similar-to-a-product" title="Permalink to this headline">¶</a></h2>
+<h3>Get Top Selling Products similar to a product<a class="headerlink" href="#get-top-selling-products-similar-to-a-product" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-python"><div class="highlight"><pre>RecommendationResponse response = Unbxd.getRecommendationsClient().getPDPTopSellers(&quot;sku1&quot;, uid, &quot;100.0.0.1&quot;);  // uid is value of the cookie : &quot;unbxd.userId&quot;
 </pre></div>
 </div>
 </div>
 <div class="section" id="get-products-based-on-cart">
-<h2>Get Products based on Cart<a class="headerlink" href="#get-products-based-on-cart" title="Permalink to this headline">¶</a></h2>
+<h3>Get Products based on Cart<a class="headerlink" href="#get-products-based-on-cart" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-python"><div class="highlight"><pre>RecommendationResponse response = Unbxd.getRecommendationsClient().getCartRecommendations(uid, &quot;100.0.0.1&quot;);  // uid is value of the cookie : &quot;unbxd.userId&quot;
 </pre></div>
 </div>
 </div>
 <div class="section" id="understanding-recommendationresponse">
-<h2>Understanding RecommendationResponse<a class="headerlink" href="#understanding-recommendationresponse" title="Permalink to this headline">¶</a></h2>
+<h3>Understanding RecommendationResponse<a class="headerlink" href="#understanding-recommendationresponse" title="Permalink to this headline">¶</a></h3>
 <div class="highlight-python"><div class="highlight"><pre>response
 |
 +-&gt; .getStatusCode() // 200 if success.
@@ -392,94 +499,63 @@ SearchResponse response = Unbxd.getSearchClient()
 </div>
 </div>
 </div>
+</div>
 
 
           </div>
-        </div>
-      </div>
-      <div class="sphinxsidebar">
-        <div class="sphinxsidebarwrapper">
-            <p class="logo"><a href="#">
-              <img class="logo" src="_static/logo-unbxd-new.png" alt="Logo"/>
-            </a></p>
-  <h3><a href="#">Table Of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">Introduction</a></li>
-<li><a class="reference internal" href="#adding-the-dependency">Adding the dependency</a></li>
-<li><a class="reference internal" href="#configuration">Configuration</a></li>
-<li><a class="reference internal" href="#pushing-the-feed">Pushing the feed</a><ul>
-<li><a class="reference internal" href="#adding-products">Adding products</a><ul>
-<li><a class="reference internal" href="#marking-custom-field-as-multivalued">Marking custom field as multivalued</a></li>
-<li><a class="reference internal" href="#including-custom-field-in-auto-suggest">Including custom field in Auto-Suggest</a></li>
-<li><a class="reference internal" href="#flush-existing-product">Flush existing product</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#updating-products">Updating products</a></li>
-<li><a class="reference internal" href="#deleting-products">Deleting products</a></li>
-<li><a class="reference internal" href="#understanding-feedresponse-object">Understanding FeedResponse Object</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#using-search-client">Using Search Client</a><ul>
-<li><a class="reference internal" href="#making-a-search-call">Making a Search Call</a></li>
-<li><a class="reference internal" href="#making-a-bucketing-call">Making a Bucketing Call</a></li>
-<li><a class="reference internal" href="#making-a-browse-call">Making a Browse Call</a></li>
-<li><a class="reference internal" href="#understanding-searchresponse">Understanding SearchResponse</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#using-autosuggest-client">Using AutoSuggest Client</a><ul>
-<li><a class="reference internal" href="#understanding-autosuggestresponse">Understanding AutoSuggestResponse</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#using-the-recommendations-client">Using the Recommendations Client</a><ul>
-<li><a class="reference internal" href="#get-recently-viewed-products">Get Recently Viewed Products</a></li>
-<li><a class="reference internal" href="#get-reccommended-for-you-products">Get Reccommended For You Products</a></li>
-<li><a class="reference internal" href="#get-more-like-this-products">Get More Like This Products</a></li>
-<li><a class="reference internal" href="#get-also-viewed-products">Get Also Viewed Products</a></li>
-<li><a class="reference internal" href="#get-also-bought-products">Get Also Bought Products</a></li>
-<li><a class="reference internal" href="#get-top-selling-products">Get Top Selling Products</a></li>
-<li><a class="reference internal" href="#get-top-selling-products-within-a-category">Get Top Selling Products within a Category</a></li>
-<li><a class="reference internal" href="#get-top-selling-products-within-a-brand">Get Top Selling Products within a Brand</a></li>
-<li><a class="reference internal" href="#get-top-selling-products-similar-to-a-product">Get Top Selling Products similar to a product</a></li>
-<li><a class="reference internal" href="#get-products-based-on-cart">Get Products based on Cart</a></li>
-<li><a class="reference internal" href="#understanding-recommendationresponse">Understanding RecommendationResponse</a></li>
-</ul>
-</li>
-</ul>
+          <footer>
+  
 
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="_sources/index.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
-  <h3>Quick search</h3>
-    <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
-    </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2014, Sourabh Agarwal.
     </p>
-</div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+
+</footer>
+
         </div>
       </div>
-      <div class="clearer"></div>
-    </div>
-    <div class="related">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             >index</a></li>
-        <li><a href="#">Unbxd JAVA SDK 1.0 documentation</a> &raquo;</li> 
-      </ul>
-    </div>
-    <div class="footer">
-        &copy; Copyright 2014, Sourabh Agarwal.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
-    </div>
-  </body>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
 </html>

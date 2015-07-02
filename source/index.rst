@@ -4,10 +4,12 @@
    contain the root `toctree` directive.
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
+   demo
 
+================================
 Introduction
-============
+================================
 
 This SDK will enable you to use full feature set of Unbxd APIs. 
 You will be able to do the following through this SDK: 
