@@ -74,9 +74,10 @@ public class RecommendationsClient {
      * @param uid value of the cookie : "unbxd.userId"
      * @return this
      */
-    public RecommendationsClient getRecentlyViewed(String uid){
+    public RecommendationsClient getRecentlyViewed(String uid,String ip){
         this._boxType = RecommenderBoxType.RECENTLY_VIEWED;
         this.uid = uid;
+        this.ip = ip;
 
         return this;
     }
@@ -101,10 +102,11 @@ public class RecommendationsClient {
      * @param uid value of the cookie : "unbxd.userId"
      * @return this
      */
-    public RecommendationsClient getMoreLikeThis(String uniqueId, String uid){
+    public RecommendationsClient getMoreLikeThis(String uniqueId, String uid,String ip){
         this._boxType = RecommenderBoxType.MORE_LIKE_THESE;
         this.uid = uid;
         this.uniqueId = uniqueId;
+        this.ip = ip;
 
         return this;
     }
@@ -115,10 +117,11 @@ public class RecommendationsClient {
      * @param uid value of the cookie : "unbxd.userId"
      * @return this
      */
-    public RecommendationsClient getAlsoViewed(String uniqueId, String uid){
+    public RecommendationsClient getAlsoViewed(String uniqueId, String uid,String ip){
         this._boxType = RecommenderBoxType.ALSO_VIEWED;
         this.uid = uid;
         this.uniqueId = uniqueId;
+        this.ip = ip;
 
         return this;
     }
@@ -129,10 +132,11 @@ public class RecommendationsClient {
      * @param uid value of the cookie : "unbxd.userId"
      * @return this
      */
-    public RecommendationsClient getAlsoBought(String uniqueId, String uid){
+    public RecommendationsClient getAlsoBought(String uniqueId, String uid, String ip){
         this._boxType = RecommenderBoxType.ALSO_BOUGHT;
         this.uid = uid;
         this.uniqueId = uniqueId;
+        this.ip = ip;
 
         return this;
     }

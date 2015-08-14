@@ -12,9 +12,9 @@ import org.apache.log4j.Logger;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Array;
 import java.net.URLEncoder;
 import java.util.*;
 
@@ -40,12 +40,12 @@ public class SearchClient {
     private String siteKey;
     private String apiKey;
     private boolean secure;
-
     private String query;
     private Map<String, String> queryParams;
     private String bucketField;
     private List<String> categoryIds;
-    private Map<String, List<String>> filters;
+    private Map<String, List<String>> textFilters;
+    private Map<String, List<ArrayList>> rangeFilters;
     private Map<String, SortDir> sorts;
     private int pageNo;
     private int pageSize;
@@ -56,10 +56,11 @@ public class SearchClient {
         this.apiKey = apiKey;
         this.secure = secure;
 
-        this.filters = new HashMap<String, List<String>>();
+        this.textFilters = new HashMap<String, List<String>>();
+        this.rangeFilters = new HashMap<String, List<ArrayList>>();
         this.sorts = new LinkedHashMap<String, SortDir>(); // The map needs to be insertion ordered.
 
-        this.pageNo = 1;
+        this.pageNo = 0;
         this.pageSize = 10;
     }
 
@@ -133,8 +134,40 @@ public class SearchClient {
      * @param values
      * @return this
      */
-    public SearchClient addFilter(String fieldName, String... values){
-        this.filters.put(fieldName, Arrays.asList(values));
+    public SearchClient addTextFilter(String fieldName, String... values){
+        if(textFilters.get(fieldName)==null) {
+            this.textFilters.put(fieldName, Arrays.asList(values));
+        }else{
+            List<String> pre = this.textFilters.get(fieldName);
+            ArrayList<String> curr =new ArrayList<String>();
+            for(String c : pre){
+                curr.add(c);
+            }
+            for(String c : Arrays.asList(values)){
+                curr.add(c);
+            }
+            this.textFilters.put(fieldName,curr);
+        }
+        return this;
+    }
+
+    public SearchClient addRangeFilter(String fieldName, String start, String end){
+        if(rangeFilters.get(fieldName)==null){
+            ArrayList<String> sub = new ArrayList<String>();
+            ArrayList<ArrayList> arr = new ArrayList<ArrayList>();
+            sub.add(start);
+            sub.add(end);
+            arr.add(sub);
+            this.rangeFilters.put(fieldName,arr);
+        }
+        else{
+            ArrayList<String> sub1 = new ArrayList<String>();
+            sub1.add(start);
+            sub1.add(end);
+            ArrayList<ArrayList> d = (ArrayList<ArrayList>) this.rangeFilters.get(fieldName);
+            d.add(sub1);
+            this.rangeFilters.put(fieldName,d);
+        }
 
         return this;
     }
@@ -169,7 +202,11 @@ public class SearchClient {
      * @return this
      */
     public SearchClient setPage(int pageNo, int pageSize){
-        this.pageNo = pageNo;
+        if(pageNo==0) {
+            this.pageNo = pageNo;
+        }else{
+            this.pageNo = pageNo - 1;
+        }
         this.pageSize = pageSize;
 
         return this;
@@ -201,13 +238,38 @@ public class SearchClient {
                 }
             }
 
-            if(filters != null && filters.size() > 0){
-                for(String key : filters.keySet()){
-                    for(String value : filters.get(key)){
-                        sb.append("&filter=" + URLEncoder.encode(key + ":\"" + value + "\"", __encoding));
+            if(textFilters != null && textFilters.size() > 0) {
+                for (String key : textFilters.keySet()) {
+                    if (textFilters.get(key).size() > 1) {
+                        sb.append("&filter=" + URLEncoder.encode(key + ":\"" + StringUtils.join(textFilters.get(key), "\" OR " + key +":\"") + "\"", __encoding));
+                    }
+                    else {
+                        for (String value : textFilters.get(key)) {
+                            sb.append("&filter=" + URLEncoder.encode(key + ":\"" + value + "\"", __encoding));
+                        }
                     }
                 }
             }
+
+            if(rangeFilters != null && rangeFilters.size()>0){
+                for(String key : rangeFilters.keySet()){
+                    if (rangeFilters.get(key).size() > 1) {
+                        sb.append("&filter=");
+                        Integer size = rangeFilters.get(key).size();
+                        for (ArrayList E : rangeFilters.get(key)) {
+                            if (size == 1) {
+                                sb.append(URLEncoder.encode(key, __encoding) + ":[" + URLEncoder.encode(E.get(0) + " TO " + E.get(1), __encoding) + "]");
+                            } else {
+                                sb.append(URLEncoder.encode(key, __encoding) + ":[" + URLEncoder.encode(E.get(0) + " TO " + E.get(1), __encoding) + "]" + URLEncoder.encode(" OR ",__encoding));
+                            }
+                            size = size - 1;
+                        }
+                    }
+                    else{
+                            sb.append("&filter=" + URLEncoder.encode(key, __encoding) + ":[" + URLEncoder.encode(rangeFilters.get(key).get(0).get(0) + " TO " + rangeFilters.get(key).get(0).get(1), __encoding) + "]");
+                        }
+                    }
+                }
 
             if(sorts != null && sorts.size() > 0){
                 List<String> sorts = new ArrayList<String>();
