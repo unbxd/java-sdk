@@ -23,6 +23,7 @@ public class SearchResponse {
     private Facets _facets;
     private Stats _stats;
     private List<String> _spellCorrections;
+    private Banners _banner;
 
     public SearchResponse(Map<String, Object> params){
         if(params.containsKey("error")){
@@ -52,6 +53,11 @@ public class SearchResponse {
             if(params.containsKey("facets")){
                 Map<String, Object> facets = (Map<String, Object>) params.get("facets");
                 this._facets = new Facets(facets);
+            }
+
+            if(params.containsKey("banner")){
+                Map<String, Object> banners = (Map<String, Object>) params.get("banner");
+                this._banner = new Banners(banners);
             }
 
             if(params.containsKey("stats")){
@@ -132,9 +138,14 @@ public class SearchResponse {
         return this._spellCorrections;
     }
 
+    public Banners get_banner() {
+        return _banner;
+    }
+
     /**
      * @return Bucketed Response. Refer {@link BucketResults}
      */
+
     public BucketResults getBuckets(){
         return this._buckets;
     }

@@ -25,7 +25,7 @@ public class SearchClientTest extends TestCase{
         SearchResponse response = Unbxd.getSearchClient()
                 .search("*", queryParams)
                 .addTextFilter("category_fq","men")
-                .addRangeFilter("price_fq", "1000","2000")
+                .addRangeFilter("price_fq", "1000", "2000")
                 .addSort("price", SearchClient.SortDir.ASC)
                 .setPage(0, 10)
                 .execute();
@@ -51,7 +51,8 @@ public class SearchClientTest extends TestCase{
         SearchResponse response = Unbxd.getSearchClient()
                 .browse("1", queryParams)
                 .addTextFilter("category_fq","men")
-                .addRangeFilter("price_fq", "1000","2000")
+                .addTextFilter("category_fq","women")
+                .addRangeFilter("price_fq", "1000", "2000")
                 .addSort("price", SearchClient.SortDir.ASC)
                 .setPage(0, 10)
                 .execute();

@@ -37,6 +37,6 @@ public class AutoSuggestClientTest extends TestCase{
         Assert.assertNotNull(response.getQueryTime());
         Assert.assertEquals(0, response.getErrorCode());
         Assert.assertEquals("OK", response.getMessage());
-        Assert.assertEquals(1925, response.getTotalResultsCount());
+        Assert.assertNotEquals(0, response.getTotalResultsCount());
     }
 }
