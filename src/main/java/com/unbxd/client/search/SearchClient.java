@@ -49,6 +49,7 @@ public class SearchClient {
     private Map<String, SortDir> sorts;
     private int pageNo;
     private int pageSize;
+    private  Map<String, String> extraParams;
 
 
     protected SearchClient(String siteKey, String apiKey, boolean secure) {
@@ -60,6 +61,7 @@ public class SearchClient {
         this.rangeFilters = new HashMap<String, List<String>>();
         this.sorts = new LinkedHashMap<String, SortDir>(); // The map needs to be insertion ordered.
 
+        this.extraParams = new HashMap<String, String>();
         this.pageNo = 0;
         this.pageSize = 10;
     }
@@ -158,7 +160,11 @@ public class SearchClient {
             String range = "[" + start + " TO "+ end + "]";
             this.rangeFilters.put(fieldName,Arrays.asList(range));
         }
+        return this;
+    }
 
+    public SearchClient otherParams(String Otherkey, String Othervalue){
+        this.extraParams.put(Otherkey, Othervalue);
         return this;
     }
 
@@ -247,6 +253,12 @@ public class SearchClient {
                     sorts.add(key + " " + this.sorts.get(key).name().toLowerCase());
                 }
                 sb.append("&sort=" + URLEncoder.encode(StringUtils.join(sorts, ","), __encoding));
+            }
+
+            if(extraParams != null && extraParams.size() > 0){
+                for(String key : extraParams.keySet()){
+                    sb.append("&" + key + "=" + URLEncoder.encode(extraParams.get(key),__encoding));
+                }
             }
 
             sb.append("&pageNumber=" + pageNo);
