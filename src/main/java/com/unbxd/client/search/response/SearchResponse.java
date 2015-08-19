@@ -1,6 +1,7 @@
 package com.unbxd.client.search.response;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -23,7 +24,7 @@ public class SearchResponse {
     private Facets _facets;
     private Stats _stats;
     private List<String> _spellCorrections;
-    private Banners _banner;
+    private Banner _banner;
 
     public SearchResponse(Map<String, Object> params){
         if(params.containsKey("error")){
@@ -57,7 +58,7 @@ public class SearchResponse {
 
             if(params.containsKey("banner")){
                 Map<String, Object> banners = (Map<String, Object>) params.get("banner");
-                this._banner = new Banners(banners);
+                this._banner = new Banner(banners);
             }
 
             if(params.containsKey("stats")){
@@ -138,9 +139,15 @@ public class SearchResponse {
         return this._spellCorrections;
     }
 
-    public Banners get_banner() {
-        return _banner;
+    /**
+      * @return Stats. Refer {@link Banner}
+     */
+    public ArrayList<LinkedHashMap<String, String>> getBanner() {
+        return _banner.getBanners();
     }
+
+    public ArrayList<String> getAppliedCategory() { return _banner.getCategories();}
+
 
     /**
      * @return Bucketed Response. Refer {@link BucketResults}
