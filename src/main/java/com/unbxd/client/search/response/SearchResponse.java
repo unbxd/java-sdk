@@ -142,7 +142,7 @@ public class SearchResponse {
     /**
       * @return Stats. Refer {@link Banner}
      */
-    public ArrayList<LinkedHashMap<String, String>> getBanner() {
+    public List<Banners> getBanner() {
         return _banner.getBanners();
     }
 

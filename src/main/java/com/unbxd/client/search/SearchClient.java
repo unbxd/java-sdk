@@ -137,24 +137,24 @@ public class SearchClient {
      * @return this
      */
     public SearchClient addTextFilter(String fieldName, String... values){
-        if(textFilters.containsKey(fieldName)==false) {
-            this.textFilters.put(fieldName, Arrays.asList(values));
-        }else{
-            ArrayList<String> pre = new ArrayList<String>(this.textFilters.get(fieldName));
-            for(String c : Arrays.asList(values)){
-                pre.add(c);
+        if(textFilters.containsKey(fieldName)) {
+            List<String> previousValues = new ArrayList<String>(this.textFilters.get(fieldName));
+            for(String val : values){
+                previousValues.add(val);
             }
-            this.textFilters.put(fieldName,pre);
+            this.textFilters.put(fieldName,previousValues);
+        }else{
+            this.textFilters.put(fieldName, Arrays.asList(values));
         }
         return this;
     }
 
     public SearchClient addRangeFilter(String fieldName, String start, String end){
         if(rangeFilters.containsKey(fieldName)){
-            ArrayList<String> pre = new ArrayList<String>(this.rangeFilters.get(fieldName));
+            List<String> previousValues = this.rangeFilters.get(fieldName);
             String range = "[" + start + " TO "+ end + "]";
-            pre.addAll(Arrays.asList(range));
-            this.rangeFilters.put(fieldName, pre);
+            previousValues.add(range);
+            this.rangeFilters.put(fieldName, previousValues);
         }
         else{
             String range = "[" + start + " TO "+ end + "]";
@@ -242,7 +242,7 @@ public class SearchClient {
 
             if(rangeFilters != null && rangeFilters.size()>0){
                 for(String key : rangeFilters.keySet()){
-                    sb.append("&filter=" + URLEncoder.encode(key + ":" + StringUtils.join(rangeFilters.get(key), " OR " + key +":") + "", __encoding));
+                    sb.append("&filter=" + URLEncoder.encode(key + ":" + StringUtils.join(rangeFilters.get(key), " OR " + key +":"), __encoding));
                     }
 
                 }

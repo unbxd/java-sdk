@@ -11,9 +11,17 @@ import java.util.Map;
 public class Banner {
     protected ArrayList<String> categories;
     protected ArrayList<LinkedHashMap<String, String>> banners;
+    protected List<Banners> _banner;
 
     public Banner(Map<String, Object> params) {
+        this._banner = new ArrayList<Banners>();
         this.banners = (ArrayList<LinkedHashMap<String, String>>) params.get("banners");
+
+        for(LinkedHashMap<String, String> aBanner : banners) {
+            Banners banner = new Banners(aBanner);
+            _banner.add(banner);
+        }
+
         this.categories = (ArrayList<String>) params.get("categories");
     }
 
@@ -21,7 +29,7 @@ public class Banner {
         return categories;
     }
 
-    public ArrayList<LinkedHashMap<String, String>> getBanners() {
-        return banners;
+    public List<Banners> getBanners() {
+        return _banner;
     }
 }
