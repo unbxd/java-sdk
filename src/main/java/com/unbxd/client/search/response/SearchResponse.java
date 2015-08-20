@@ -24,7 +24,7 @@ public class SearchResponse {
     private Facets _facets;
     private Stats _stats;
     private List<String> _spellCorrections;
-    private Banner _banner;
+    private Banners _banner;
 
     public SearchResponse(Map<String, Object> params){
         if(params.containsKey("error")){
@@ -58,7 +58,7 @@ public class SearchResponse {
 
             if(params.containsKey("banner")){
                 Map<String, Object> banners = (Map<String, Object>) params.get("banner");
-                this._banner = new Banner(banners);
+                this._banner = new Banners(banners);
             }
 
             if(params.containsKey("stats")){
@@ -142,8 +142,8 @@ public class SearchResponse {
     /**
       * @return Stats. Refer {@link Banner}
      */
-    public List<Banners> getBanner() {
-        return _banner.getBanners();
+    public List<Banner> getBanners() {
+        return _banner.getBanner();
     }
 
     public ArrayList<String> getAppliedCategory() { return _banner.getCategories();}

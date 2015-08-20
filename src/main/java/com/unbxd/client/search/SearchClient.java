@@ -138,13 +138,11 @@ public class SearchClient {
      */
     public SearchClient addTextFilter(String fieldName, String... values){
         if(textFilters.containsKey(fieldName)) {
-            List<String> previousValues = new ArrayList<String>(this.textFilters.get(fieldName));
-            for(String val : values){
-                previousValues.add(val);
-            }
+            List<String> previousValues = this.textFilters.get(fieldName);
+            previousValues.addAll(Arrays.asList(values));
             this.textFilters.put(fieldName,previousValues);
         }else{
-            this.textFilters.put(fieldName, Arrays.asList(values));
+            this.textFilters.put(fieldName, new ArrayList<String>(Arrays.asList(values)));
         }
         return this;
     }
@@ -157,13 +155,15 @@ public class SearchClient {
             this.rangeFilters.put(fieldName, previousValues);
         }
         else{
+            List<String> values = new ArrayList<String>();
             String range = "[" + start + " TO "+ end + "]";
-            this.rangeFilters.put(fieldName,Arrays.asList(range));
+            values.add(range);
+            this.rangeFilters.put(fieldName, values);
         }
         return this;
     }
 
-    public SearchClient otherParams(String Otherkey, String Othervalue){
+    public SearchClient addOtherParams(String Otherkey, String Othervalue){
         this.extraParams.put(Otherkey, Othervalue);
         return this;
     }

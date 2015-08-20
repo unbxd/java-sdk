@@ -27,6 +27,7 @@ public class SearchClientTest extends TestCase{
                 .addTextFilter("category_fq","men")
                 .addRangeFilter("price_fq", "1000", "2000")
                 .addSort("price", SearchClient.SortDir.ASC)
+                .addOtherParams("stats","price_fq")
                 .setPage(0, 10)
                 .execute();
 
@@ -35,12 +36,13 @@ public class SearchClientTest extends TestCase{
         Assert.assertNotEquals(0, response.getQueryTime());
         Assert.assertEquals(0, response.getErrorCode());
         Assert.assertEquals("OK", response.getMessage());
-        Assert.assertEquals(165, response.getTotalResultsCount());
+        Assert.assertNotEquals(0, response.getTotalResultsCount());
         Assert.assertEquals(10, response.getResults().getResultsCount());
         Assert.assertEquals(1, response.getResults().getAt(0).getAttributes().size());
         Assert.assertNotNull(response.getResults().getAt(0).getAttributes().get("uniqueId"));
         Assert.assertNotNull(response.getStats());
-        Assert.assertNotNull(response.getStats().getStat("price").getMin());
+        Assert.assertNotNull(response.getStats().getStat("price_fq").getMin());
+        Assert.assertNotNull(response.getBanners());
     }
 
     public void test_browse() throws SearchException, ConfigException {
@@ -50,9 +52,10 @@ public class SearchClientTest extends TestCase{
 
         SearchResponse response = Unbxd.getSearchClient()
                 .browse("1", queryParams)
-                .addTextFilter("category_fq","men")
+                .addTextFilter("category_fq", "men")
                 .addTextFilter("category_fq","women")
                 .addRangeFilter("price_fq", "1000", "2000")
+                .addRangeFilter("price_fq", "2000", "3000")
                 .addSort("price", SearchClient.SortDir.ASC)
                 .setPage(0, 10)
                 .execute();
@@ -62,12 +65,13 @@ public class SearchClientTest extends TestCase{
         Assert.assertNotEquals(0, response.getQueryTime());
         Assert.assertEquals(0, response.getErrorCode());
         Assert.assertEquals("OK", response.getMessage());
-        Assert.assertEquals(165, response.getTotalResultsCount());
+        Assert.assertNotEquals(0, response.getTotalResultsCount());
         Assert.assertEquals(10, response.getResults().getResultsCount());
         Assert.assertEquals(1, response.getResults().getAt(0).getAttributes().size());
         Assert.assertNotNull(response.getResults().getAt(0).getAttributes().get("uniqueId"));
         Assert.assertNotNull(response.getStats());
         Assert.assertNotNull(response.getStats().getStat("price").getMin());
+        Assert.assertNotNull(response.getBanners());
     }
 
     public void test_bucket() throws SearchException, ConfigException {
@@ -88,10 +92,10 @@ public class SearchClientTest extends TestCase{
         Assert.assertNotEquals(0, response.getQueryTime());
         Assert.assertEquals(0, response.getErrorCode());
         Assert.assertEquals("OK", response.getMessage());
-        Assert.assertEquals(165, response.getTotalResultsCount());
+        Assert.assertNotEquals(0, response.getTotalResultsCount());
         Assert.assertNull(response.getResults());
         Assert.assertEquals(1, response.getBuckets().getNumberOfBuckets());
-        Assert.assertEquals(165, response.getBuckets().getBuckets().get(0).getTotalResultsCount());
+        Assert.assertNotEquals(0, response.getBuckets().getBuckets().get(0).getTotalResultsCount());
         Assert.assertEquals(1, response.getBuckets().getBuckets().get(0).getResults().getAt(0).getAttributes().size());
         Assert.assertNotNull(response.getBuckets().getBuckets().get(0).getResults().getAt(0).getAttributes().get("uniqueId"));
         Assert.assertNotNull(response.getStats());

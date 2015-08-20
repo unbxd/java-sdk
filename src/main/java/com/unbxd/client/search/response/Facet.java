@@ -25,7 +25,7 @@ public class Facet {
         if(params.containsKey("position")){
             this.position = (Integer) params.get("position");
         }else {
-            this.position = -1;
+            this.position = null;
         }
         if(params.containsKey("displayName")){
             this.displayName = (String) params.get("displayName");
@@ -77,7 +77,7 @@ public class Facet {
         return this._facetEntries;
     }
 
-    public Integer  getPosition(){ return this.position; }
+    public Integer getPosition(){ return this.position; }
 
     public String getDisplayName() { return  this.displayName; }
 
