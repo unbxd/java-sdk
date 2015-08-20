@@ -27,7 +27,6 @@ public class SearchClientTest extends TestCase{
                 .addTextFilter("category_fq","men")
                 .addRangeFilter("price_fq", "1000", "2000")
                 .addSort("price", SearchClient.SortDir.ASC)
-                .addOtherParams("stats","price_fq")
                 .setPage(0, 10)
                 .execute();
 
@@ -41,7 +40,7 @@ public class SearchClientTest extends TestCase{
         Assert.assertEquals(1, response.getResults().getAt(0).getAttributes().size());
         Assert.assertNotNull(response.getResults().getAt(0).getAttributes().get("uniqueId"));
         Assert.assertNotNull(response.getStats());
-        Assert.assertNotNull(response.getStats().getStat("price_fq").getMin());
+        Assert.assertNotNull(response.getStats().getStat("price").getMin());
         Assert.assertNotNull(response.getBanners());
     }
 
