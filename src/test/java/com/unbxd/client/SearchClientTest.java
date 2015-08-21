@@ -41,7 +41,6 @@ public class SearchClientTest extends TestCase{
         Assert.assertNotNull(response.getResults().getAt(0).getAttributes().get("uniqueId"));
         Assert.assertNotNull(response.getStats());
         Assert.assertNotNull(response.getStats().getStat("price").getMin());
-        Assert.assertNotNull(response.getBanners());
         Assert.assertTrue(response.getStats().getStat("price").getMin()>=1000);
         Assert.assertTrue(response.getStats().getStat("price").getMax()<=2000);
     }
@@ -72,7 +71,6 @@ public class SearchClientTest extends TestCase{
         Assert.assertNotNull(response.getResults().getAt(0).getAttributes().get("uniqueId"));
         Assert.assertNotNull(response.getStats());
         Assert.assertNotNull(response.getStats().getStat("price").getMin());
-        Assert.assertNotNull(response.getBanners());
         Assert.assertTrue(response.getStats().getStat("price").getMin()>=1000);
         Assert.assertTrue(response.getStats().getStat("price").getMax()<=3000);
     }
