@@ -15,11 +15,23 @@ public class Facet {
 
     protected String name;
     protected String _type;
+    protected Integer position;
+    protected String displayName;
     protected List<FacetEntry> _facetEntries;
 
     protected Facet(String facetName, Map<String, Object> params){
         this.name = facetName;
         this._type = (String) params.get("type");
+        if(params.containsKey("position")){
+            this.position = (Integer) params.get("position");
+        }else {
+            this.position = null;
+        }
+        if(params.containsKey("displayName")){
+            this.displayName = (String) params.get("displayName");
+        }else {
+            this.displayName = null;
+        }
 
         if(params.get("values") instanceof Map){
             Map<String, Object> map = (Map<String, Object>) params.get("values");
@@ -64,5 +76,9 @@ public class Facet {
     public List<FacetEntry> getEntries(){
         return this._facetEntries;
     }
+
+    public Integer getPosition(){ return this.position; }
+
+    public String getDisplayName() { return  this.displayName; }
 
 }

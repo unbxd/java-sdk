@@ -14,7 +14,7 @@ public class SearchClientTest extends TestCase{
     protected void setUp() throws Exception {
         super.setUp();
 
-        Unbxd.configure("demo-u1393483043451", "ae30782589df23780a9d98502388555f", "ae30782589df23780a9d98502388555f");
+        Unbxd.configure("demosite-u1407617955968", "64a4a2592a648ac8415e13c561e44991", "64a4a2592a648ac8415e13c561e44991");
     }
 
     public void test_search() throws SearchException, ConfigException {
@@ -24,10 +24,10 @@ public class SearchClientTest extends TestCase{
 
         SearchResponse response = Unbxd.getSearchClient()
                 .search("*", queryParams)
-                .addFilter("color_fq","black")
-                .addFilter("brand_fq", "Ralph Lauren")
+                .addTextFilter("category_fq","men")
+                .addRangeFilter("price_fq", "1000", "2000")
                 .addSort("price", SearchClient.SortDir.ASC)
-                .setPage(2, 5)
+                .setPage(0, 10)
                 .execute();
 
         Assert.assertNotNull(response);
@@ -36,11 +36,13 @@ public class SearchClientTest extends TestCase{
         Assert.assertEquals(0, response.getErrorCode());
         Assert.assertEquals("OK", response.getMessage());
         Assert.assertNotEquals(0, response.getTotalResultsCount());
-        Assert.assertEquals(5, response.getResults().getResultsCount());
+        Assert.assertEquals(10, response.getResults().getResultsCount());
         Assert.assertEquals(1, response.getResults().getAt(0).getAttributes().size());
         Assert.assertNotNull(response.getResults().getAt(0).getAttributes().get("uniqueId"));
         Assert.assertNotNull(response.getStats());
         Assert.assertNotNull(response.getStats().getStat("price").getMin());
+        Assert.assertTrue(response.getStats().getStat("price").getMin()>=1000);
+        Assert.assertTrue(response.getStats().getStat("price").getMax()<=2000);
     }
 
     public void test_browse() throws SearchException, ConfigException {
@@ -50,10 +52,12 @@ public class SearchClientTest extends TestCase{
 
         SearchResponse response = Unbxd.getSearchClient()
                 .browse("1", queryParams)
-                .addFilter("color_fq","black")
-                .addFilter("brand_fq", "Ralph Lauren")
+                .addTextFilter("category_fq", "men")
+                .addTextFilter("category_fq","women")
+                .addRangeFilter("price_fq", "1000", "2000")
+                .addRangeFilter("price_fq", "2000", "3000")
                 .addSort("price", SearchClient.SortDir.ASC)
-                .setPage(2, 5)
+                .setPage(0, 10)
                 .execute();
 
         Assert.assertNotNull(response);
@@ -62,11 +66,13 @@ public class SearchClientTest extends TestCase{
         Assert.assertEquals(0, response.getErrorCode());
         Assert.assertEquals("OK", response.getMessage());
         Assert.assertNotEquals(0, response.getTotalResultsCount());
-        Assert.assertEquals(5, response.getResults().getResultsCount());
+        Assert.assertEquals(10, response.getResults().getResultsCount());
         Assert.assertEquals(1, response.getResults().getAt(0).getAttributes().size());
         Assert.assertNotNull(response.getResults().getAt(0).getAttributes().get("uniqueId"));
         Assert.assertNotNull(response.getStats());
         Assert.assertNotNull(response.getStats().getStat("price").getMin());
+        Assert.assertTrue(response.getStats().getStat("price").getMin()>=1000);
+        Assert.assertTrue(response.getStats().getStat("price").getMax()<=3000);
     }
 
     public void test_bucket() throws SearchException, ConfigException {
@@ -76,10 +82,10 @@ public class SearchClientTest extends TestCase{
 
         SearchResponse response = Unbxd.getSearchClient()
                 .bucket("*", "category", queryParams)
-                .addFilter("color_fq","black")
-                .addFilter("brand_fq", "Ralph Lauren")
+                .addTextFilter("category_fq","men")
+                .addRangeFilter("price_fq", "1000","2000")
                 .addSort("price", SearchClient.SortDir.ASC)
-                .setPage(2, 5)
+                .setPage(0, 10)
                 .execute();
 
         Assert.assertNotNull(response);
@@ -89,11 +95,13 @@ public class SearchClientTest extends TestCase{
         Assert.assertEquals("OK", response.getMessage());
         Assert.assertNotEquals(0, response.getTotalResultsCount());
         Assert.assertNull(response.getResults());
-        Assert.assertEquals(5, response.getBuckets().getNumberOfBuckets());
+        Assert.assertEquals(1, response.getBuckets().getNumberOfBuckets());
         Assert.assertNotEquals(0, response.getBuckets().getBuckets().get(0).getTotalResultsCount());
         Assert.assertEquals(1, response.getBuckets().getBuckets().get(0).getResults().getAt(0).getAttributes().size());
         Assert.assertNotNull(response.getBuckets().getBuckets().get(0).getResults().getAt(0).getAttributes().get("uniqueId"));
         Assert.assertNotNull(response.getStats());
         Assert.assertNotNull(response.getStats().getStat("price").getMin());
+        Assert.assertTrue(response.getStats().getStat("price").getMin()>=1000);
+        Assert.assertTrue(response.getStats().getStat("price").getMax()<=2000);
     }
 }

@@ -18,17 +18,16 @@ public class RecommendationsClientTest extends TestCase{
     protected void setUp() throws Exception {
         super.setUp();
 
-        Unbxd.configure("demo-u1393483043451", "ae30782589df23780a9d98502388555f", "ae30782589df23780a9d98502388555f");
+        Unbxd.configure("demosite-u1407617955968", "64a4a2592a648ac8415e13c561e44991", "64a4a2592a648ac8415e13c561e44991");
     }
 
     public void test() throws RecommendationsException, ConfigException {
-        RecommendationResponse response = Unbxd.getRecommendationsClient().getMoreLikeThis("532062745e4016fd1c73b7a4", null).execute();
+        RecommendationResponse response = Unbxd.getRecommendationsClient().getMoreLikeThis("sku1", null,"100.0.0.1").execute();
 
         Assert.assertNotNull(response);
         Assert.assertEquals(200, response.getStatusCode());
         Assert.assertEquals("OK", response.getMessage());
-        Assert.assertEquals(6, response.getTotalResultsCount());
-        Assert.assertEquals(6, response.getResults().getResultsCount());
-        Assert.assertNotNull(response.getResults().getAt(0).getUniqueId());
+        Assert.assertEquals(0, response.getTotalResultsCount());
+        Assert.assertEquals(0, response.getResults().getResultsCount());
     }
 }

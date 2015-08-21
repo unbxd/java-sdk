@@ -12,9 +12,9 @@ import org.apache.log4j.Logger;
 import org.codehaus.jackson.map.ObjectMapper;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.lang.reflect.Array;
 import java.net.URLEncoder;
 import java.util.*;
 
@@ -40,15 +40,16 @@ public class SearchClient {
     private String siteKey;
     private String apiKey;
     private boolean secure;
-
     private String query;
     private Map<String, String> queryParams;
     private String bucketField;
     private List<String> categoryIds;
-    private Map<String, List<String>> filters;
+    private Map<String, List<String>> textFilters;
+    private Map<String, List<String>> rangeFilters;
     private Map<String, SortDir> sorts;
     private int pageNo;
     private int pageSize;
+    private  Map<String, String> extraParams;
 
 
     protected SearchClient(String siteKey, String apiKey, boolean secure) {
@@ -56,10 +57,12 @@ public class SearchClient {
         this.apiKey = apiKey;
         this.secure = secure;
 
-        this.filters = new HashMap<String, List<String>>();
+        this.textFilters = new HashMap<String, List<String>>();
+        this.rangeFilters = new HashMap<String, List<String>>();
         this.sorts = new LinkedHashMap<String, SortDir>(); // The map needs to be insertion ordered.
 
-        this.pageNo = 1;
+        this.extraParams = new HashMap<String, String>();
+        this.pageNo = 0;
         this.pageSize = 10;
     }
 
@@ -133,9 +136,35 @@ public class SearchClient {
      * @param values
      * @return this
      */
-    public SearchClient addFilter(String fieldName, String... values){
-        this.filters.put(fieldName, Arrays.asList(values));
+    public SearchClient addTextFilter(String fieldName, String... values){
+        if(textFilters.containsKey(fieldName)) {
+            List<String> previousValues = this.textFilters.get(fieldName);
+            previousValues.addAll(Arrays.asList(values));
+            this.textFilters.put(fieldName,previousValues);
+        }else{
+            this.textFilters.put(fieldName, new ArrayList<String>(Arrays.asList(values)));
+        }
+        return this;
+    }
 
+    public SearchClient addRangeFilter(String fieldName, String start, String end){
+        if(rangeFilters.containsKey(fieldName)){
+            List<String> previousValues = this.rangeFilters.get(fieldName);
+            String range = "[" + start + " TO "+ end + "]";
+            previousValues.add(range);
+            this.rangeFilters.put(fieldName, previousValues);
+        }
+        else{
+            List<String> values = new ArrayList<String>();
+            String range = "[" + start + " TO "+ end + "]";
+            values.add(range);
+            this.rangeFilters.put(fieldName, values);
+        }
+        return this;
+    }
+
+    public SearchClient addOtherParams(String Otherkey, String Othervalue){
+        this.extraParams.put(Otherkey, Othervalue);
         return this;
     }
 
@@ -169,7 +198,11 @@ public class SearchClient {
      * @return this
      */
     public SearchClient setPage(int pageNo, int pageSize){
-        this.pageNo = pageNo;
+        if(pageNo==0) {
+            this.pageNo = pageNo;
+        }else{
+            this.pageNo = pageNo - 1;
+        }
         this.pageSize = pageSize;
 
         return this;
@@ -201,13 +234,18 @@ public class SearchClient {
                 }
             }
 
-            if(filters != null && filters.size() > 0){
-                for(String key : filters.keySet()){
-                    for(String value : filters.get(key)){
-                        sb.append("&filter=" + URLEncoder.encode(key + ":\"" + value + "\"", __encoding));
+            if(textFilters != null && textFilters.size() > 0) {
+                for (String key : textFilters.keySet()) {
+                        sb.append("&filter=" + URLEncoder.encode(key + ":\"" + StringUtils.join(textFilters.get(key), "\" OR " + key +":\"") + "\"", __encoding));
                     }
-                }
             }
+
+            if(rangeFilters != null && rangeFilters.size()>0){
+                for(String key : rangeFilters.keySet()){
+                    sb.append("&filter=" + URLEncoder.encode(key + ":" + StringUtils.join(rangeFilters.get(key), " OR " + key +":"), __encoding));
+                    }
+
+                }
 
             if(sorts != null && sorts.size() > 0){
                 List<String> sorts = new ArrayList<String>();
@@ -215,6 +253,12 @@ public class SearchClient {
                     sorts.add(key + " " + this.sorts.get(key).name().toLowerCase());
                 }
                 sb.append("&sort=" + URLEncoder.encode(StringUtils.join(sorts, ","), __encoding));
+            }
+
+            if(extraParams != null && extraParams.size() > 0){
+                for(String key : extraParams.keySet()){
+                    sb.append("&" + key + "=" + URLEncoder.encode(extraParams.get(key),__encoding));
+                }
             }
 
             sb.append("&pageNumber=" + pageNo);

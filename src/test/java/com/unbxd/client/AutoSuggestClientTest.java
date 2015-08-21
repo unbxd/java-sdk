@@ -20,7 +20,7 @@ public class AutoSuggestClientTest extends TestCase{
     protected void setUp() throws Exception {
         super.setUp();
 
-        Unbxd.configure("autosuggesttest-u1405357792247", "7db139ac885f6516fb276520668daf83", "7db139ac885f6516fb276520668daf83");
+        Unbxd.configure("demosite-u1407617955968", "64a4a2592a648ac8415e13c561e44991", "64a4a2592a648ac8415e13c561e44991");
     }
 
     public void test_autosuggest() throws AutoSuggestException, ConfigException {
@@ -32,10 +32,9 @@ public class AutoSuggestClientTest extends TestCase{
                 .setTopQueriesCount(4)
                 .execute();
 
-        System.out.println(response.toString());
         Assert.assertNotNull(response);
         Assert.assertEquals(0, response.getStatusCode());
-        Assert.assertNotEquals(0, response.getQueryTime());
+        Assert.assertNotNull(response.getQueryTime());
         Assert.assertEquals(0, response.getErrorCode());
         Assert.assertEquals("OK", response.getMessage());
         Assert.assertNotEquals(0, response.getTotalResultsCount());
