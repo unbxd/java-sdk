@@ -42,6 +42,8 @@ public class SearchClientTest extends TestCase{
         Assert.assertNotNull(response.getStats());
         Assert.assertNotNull(response.getStats().getStat("price").getMin());
         Assert.assertNotNull(response.getBanners());
+        Assert.assertTrue(response.getStats().getStat("price").getMin()>1000);
+        Assert.assertTrue(response.getStats().getStat("price").getMax()<2000);
     }
 
     public void test_browse() throws SearchException, ConfigException {
@@ -71,6 +73,8 @@ public class SearchClientTest extends TestCase{
         Assert.assertNotNull(response.getStats());
         Assert.assertNotNull(response.getStats().getStat("price").getMin());
         Assert.assertNotNull(response.getBanners());
+        Assert.assertTrue(response.getStats().getStat("price").getMin()>1000);
+        Assert.assertTrue(response.getStats().getStat("price").getMax()<3000);
     }
 
     public void test_bucket() throws SearchException, ConfigException {
@@ -99,5 +103,7 @@ public class SearchClientTest extends TestCase{
         Assert.assertNotNull(response.getBuckets().getBuckets().get(0).getResults().getAt(0).getAttributes().get("uniqueId"));
         Assert.assertNotNull(response.getStats());
         Assert.assertNotNull(response.getStats().getStat("price").getMin());
+        Assert.assertTrue(response.getStats().getStat("price").getMin()>1000);
+        Assert.assertTrue(response.getStats().getStat("price").getMax()<2000);
     }
 }
