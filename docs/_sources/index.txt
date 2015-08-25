@@ -40,7 +40,7 @@ The SDK must be initialized in the following manner::
 
 If you want all the calls to happen over an HTTPS link do the following::
 
-	Unbxd.configure("Your Site ID", "Your API Key", "Your Secret Key");
+	Unbxd.configure("Your Site ID", "Your API Key", "Your Secret Key",1);
 
 
 Pushing the feed
@@ -67,7 +67,7 @@ The following lines of code would send a couple of products to Unbxd Servers::
 
 	FeedResponse response = Unbxd.getFeedClient()
 				.addSchema("some-field", DataType.TEXT) // Adds a custom field
-				.addProduct(new FeedProduct("sku1", product)) // sku1 is the Unique Id for the product
+				.addProduct(new FeedProduct("sku1", product1)) // sku1 is the Unique Id for the product
 				.addProduct(new FeedProduct("sku2", product2))
 				.push(false);
 You can find the list of pre-configured fields here TODO. The above code adds a field "some-field" to the schema.
@@ -149,8 +149,9 @@ The following code snippet will make a search call with query "shirts" with filt
 	
 	SearchResponse response = Unbxd.getSearchClient()
 			.search("shirts", null)
-			.addFilter("color_fq","black")
-			.addFilter("brand_fq", "Ralph Lauren")
+			.addTextFilter("color_fq","black")
+			.addTextFilter("brand_fq", "Ralph Lauren")
+				.addRangeFilter(“price_fq”, 1000, 3000)
 			.addSort("price", SearchClient.SortDir.ASC)
 			.setPage(2, 10) // 10 products per page
 			.execute();
@@ -163,8 +164,9 @@ Extra query parameters can be added like this::
 
 	SearchResponse response = Unbxd.getSearchClient()
 			.search("shirts", queryParams)
-			.addFilter("color_fq","black")
-			.addFilter("brand_fq", "Ralph Lauren")
+			.addTextFilter("color_fq","black")
+			.addTextFilter("brand_fq", "Ralph Lauren")
+				.addRangeFilter(“price_fq”, 1000, 3000)
 			.addSort("price", SearchClient.SortDir.ASC)
 			.setPage(2, 10) // 10 products per page
 			.execute();
@@ -175,14 +177,14 @@ Making a Bucketing Call
 
 The following code snippet will make a bucketing call with query "shirts" and bucket "category"::
 	
-	SearchResponse response = Unbxd.getSearchClient().bucket("*", "category", null).execute();
+	SearchResponse response = Unbxd.getSearchClient().bucket("shirts", "category", null).execute();
 
 All other options are same as the Search call
 
 Making a Browse Call
 ********************
 
-The following code snippet will make a browse call with category id "3"::
+The following code snippet will make a browse call with category id "1":
 	
 	SearchResponse response = Unbxd.getSearchClient().browse("1", null).execute();
 
@@ -218,6 +220,8 @@ Understanding SearchResponse
 			|
 			+-> .getName() // Name of the facet
 			+-> .getType() // Type of the facet
+				+-> .getPosition() //Get facet positon
+				+-> .getDisplayName() //Get display name
 			+-> .getEntries() // Get facet entries as list
 				|
 				+-> .getTerm() // Get facet term
@@ -238,6 +242,11 @@ Understanding SearchResponse
 		+-> .getNumberOfBuckets() // Number of buckets
 		+-> .getBucket(String value) // Get Bucket for field value
 		+-> .getBuckets() // List of buckets
+	+-> .getBanner() // Get Banners.
+	   	     |
+	   	     +-> .getImageUrl()
+	   	     +-> .getLandingPageUrl()
+	+-> .getSpellCorrections() // Spell corrections
 
 
 Using AutoSuggest Client
@@ -289,9 +298,9 @@ Get Recently Viewed Products
 
 ::
 	
-	RecommendationResponse response = Unbxd.getRecommendationsClient().getRecentlyViewed(uid); // uid is value of the cookie : "unbxd.userId"
+	RecommendationResponse response = Unbxd.getRecommendationsClient().getRecentlyViewed(uid,"100.0.0.1"); // uid is value of the cookie : "unbxd.userId", "100.0.0.1" is IP address
 
-Get Reccommended For You Products
+Get Recommended For You Products
 ****************************
 	
 ::
@@ -303,7 +312,7 @@ Get More Like This Products
 	
 ::
 
-	RecommendationResponse response = Unbxd.getRecommendationsClient().getMoreLikeThis("sku1", uid); // uid is value of the cookie : "unbxd.userId"
+	RecommendationResponse response = Unbxd.getRecommendationsClient().getMoreLikeThis("sku1", uid, "100.0.0.1"); // uid is value of the cookie : "unbxd.userId" "100.0.0.1" is IP address
 
 
 Get Also Viewed Products
@@ -311,49 +320,49 @@ Get Also Viewed Products
 	
 ::
 
-	RecommendationResponse response = Unbxd.getRecommendationsClient().getAlsoViewed("sku1", uid); // uid is value of the cookie : "unbxd.userId"
+	RecommendationResponse response = Unbxd.getRecommendationsClient().getAlsoViewed("sku1", uid"100.0.0.1"); // uid is value of the cookie : "unbxd.userId" "100.0.0.1" is IP address
 
 Get Also Bought Products
 ****************************
 	
 ::
 
-	RecommendationResponse response = Unbxd.getRecommendationsClient().getAlsoBought("sku1", uid); // uid is value of the cookie : "unbxd.userId"
+	RecommendationResponse response = Unbxd.getRecommendationsClient().getAlsoBought("sku1", uid"100.0.0.1"); // uid is value of the cookie : "unbxd.userId" "100.0.0.1" is IP address
 
 Get Top Selling Products
 ************************
 	
 ::
 
-	RecommendationResponse response = Unbxd.getRecommendationsClient().getTopSellers(uid, "100.0.0.1");  // uid is value of the cookie : "unbxd.userId"
+	RecommendationResponse response = Unbxd.getRecommendationsClient().getTopSellers(uid, "100.0.0.1");  // uid is value of the cookie : "unbxd.userId" "100.0.0.1" is IP address
 
 Get Top Selling Products within a Category
 ******************************************
 	
 ::
 
-	RecommendationResponse response = Unbxd.getRecommendationsClient().getCategoryTopSellers("Shoes", uid, "100.0.0.1");  // uid is value of the cookie : "unbxd.userId"
+	RecommendationResponse response = Unbxd.getRecommendationsClient().getCategoryTopSellers("Shoes", uid, "100.0.0.1");  // uid is value of the cookie : "unbxd.userId" "100.0.0.1" is IP address
 
 Get Top Selling Products within a Brand
 ***************************************
 	
 ::
 
-	RecommendationResponse response = Unbxd.getRecommendationsClient().getBrandTopSellers("Adidas", uid, "100.0.0.1");  // uid is value of the cookie : "unbxd.userId"
+	RecommendationResponse response = Unbxd.getRecommendationsClient().getBrandTopSellers("Adidas", uid, "100.0.0.1");  // uid is value of the cookie : "unbxd.userId" "100.0.0.1" is IP address "100.0.0.1" is IP address
 
 Get Top Selling Products similar to a product
 *********************************************
 	
 ::
 
-	RecommendationResponse response = Unbxd.getRecommendationsClient().getPDPTopSellers("sku1", uid, "100.0.0.1");  // uid is value of the cookie : "unbxd.userId"
+	RecommendationResponse response = Unbxd.getRecommendationsClient().getPDPTopSellers("sku1", uid, "100.0.0.1");  // uid is value of the cookie : "unbxd.userId" "100.0.0.1" is IP address
 
 Get Products based on Cart
 **************************
 	
 ::
 
-	RecommendationResponse response = Unbxd.getRecommendationsClient().getCartRecommendations(uid, "100.0.0.1");  // uid is value of the cookie : "unbxd.userId"
+	RecommendationResponse response = Unbxd.getRecommendationsClient().getCartRecommendations(uid, "100.0.0.1");  // uid is value of the cookie : "unbxd.userId" "100.0.0.1" is IP address
 
 
 Understanding RecommendationResponse
