@@ -11,8 +11,9 @@
 Introduction
 ================================
 
-This SDK will enable you to use full feature set of Unbxd APIs. 
-You will be able to do the following through this SDK: 
+Unbxd APIs are platform agnostic i.e. you can utilize our APIs irresespective of your platform to integrate Unxbd Search and Recommendation in your ecommerce store by making API calls .
+
+This documentation will show how you can use Unbxd APIs for your Java-based platform. You can use this documentation to: 
 
 * Upload Feed
 * Make Search calls
@@ -23,12 +24,13 @@ For details you can refer to the source on `GitHub <https://github.com/unbxd/jav
 
 Adding the dependency
 =====================
+You would need to add the below dependency  
 Add the following dependency in you pom.xml file::
 
 	<dependency>
 		<groupId>com.unbxd</groupId>
 		<artifactId>unbxd-java-sdk</artifactId>
-		<version>2.0</version>
+		<version>2.2</version>
 	</dependency>
 
 
@@ -40,7 +42,7 @@ The SDK must be initialized in the following manner::
 
 If you want all the calls to happen over an HTTPS link do the following::
 
-	Unbxd.configure("Your Site ID", "Your API Key", "Your Secret Key",1);
+	Unbxd.configure("Your Site ID", "Your API Key", "Your Secret Key",true);
 
 
 Pushing the feed
