@@ -362,6 +362,9 @@ public class FeedClient {
         } catch (Exception e) {
             LOG.error(e.getMessage(), e);
             throw new FeedUploadException(e);
+        } finally {
+            file.delete();
+            zipFile.delete();
         }
     }
 
