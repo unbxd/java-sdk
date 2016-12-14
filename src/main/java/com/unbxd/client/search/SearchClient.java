@@ -261,7 +261,7 @@ public class SearchClient {
                 }
             }
 
-            sb.append("&pageNumber=" + pageNo);
+            sb.append("&page=" + pageNo);
             sb.append("&rows=" + pageSize);
 
             return sb.toString();
