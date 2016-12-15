@@ -298,10 +298,12 @@ public class FeedClient {
 
         Document doc = new FeedFile(_fields, _addedDocs.values(), _updatedDocs.values(), _deletedDocs, _taxonomyNodes, _taxonomyMappings).getDoc();
 
+        File file = null;
+        File zipFile = null;
         try {
             long t = new Date().getTime();
 
-            File file = File.createTempFile(siteKey, ".xml");
+            file = File.createTempFile(siteKey, ".xml");
             FileOutputStream fos = null;
             try{
                 fos = new FileOutputStream(file);
@@ -317,7 +319,7 @@ public class FeedClient {
                     fos.close();
             }
 
-            File zipFile = this.zipIt(file);
+            zipFile = this.zipIt(file);
 
             LOG.debug("Stored at : " + zipFile.getAbsolutePath());
 
@@ -363,8 +365,12 @@ public class FeedClient {
             LOG.error(e.getMessage(), e);
             throw new FeedUploadException(e);
         } finally {
-            file.delete();
-            zipFile.delete();
+            if(null != file) {
+                file.delete();
+            }
+            if(null != zipFile) {
+                zipFile.delete();
+            }
         }
     }
 

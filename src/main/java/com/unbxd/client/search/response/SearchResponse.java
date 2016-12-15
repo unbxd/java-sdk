@@ -1,7 +1,6 @@
 package com.unbxd.client.search.response;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -25,6 +24,7 @@ public class SearchResponse {
     private Stats _stats;
     private List<String> _spellCorrections;
     private Banners _banner;
+    private Redirect redirect;
 
     public SearchResponse(Map<String, Object> params){
         if(params.containsKey("error")){
@@ -37,7 +37,10 @@ public class SearchResponse {
             Map<String, Object> metaData = (Map<String, Object>) params.get("searchMetaData");
 
             this._statusCode = (Integer) metaData.get("status");
-            this._queryTime = (Integer) metaData.get("queryTime");
+
+            if(metaData.containsKey("queryTime")) {
+                this._queryTime = (Integer) metaData.get("queryTime");
+            }
 
             if(params.containsKey("response")){
                 Map<String, Object> response = (Map<String, Object>) params.get("response");
@@ -72,6 +75,11 @@ public class SearchResponse {
                 for(Map<String, Object> suggestion : dym){
                     _spellCorrections.add((String) suggestion.get("suggestion"));
                 }
+            }
+
+            if(params.containsKey("redirect")) {
+                Map<String, Object> redirect = (Map<String, Object>) params.get("redirect");
+                this.redirect = new Redirect(redirect);
             }
         }
     }
@@ -155,5 +163,9 @@ public class SearchResponse {
 
     public BucketResults getBuckets(){
         return this._buckets;
+    }
+
+    public RedirectData getRedirect() {
+        return redirect.getRedirectData();
     }
 }
