@@ -24,7 +24,7 @@ public class SearchResponse {
     private Stats _stats;
     private List<String> _spellCorrections;
     private Banners _banner;
-    private Redirect redirect;
+    private RedirectData redirect;
 
     public SearchResponse(Map<String, Object> params){
         if(params.containsKey("error")){
@@ -78,8 +78,10 @@ public class SearchResponse {
             }
 
             if(params.containsKey("redirect")) {
-                Map<String, Object> redirect = (Map<String, Object>) params.get("redirect");
-                this.redirect = new Redirect(redirect);
+                Map<String, Object> redirect_params = (Map<String, Object>) params.get("redirect");
+                if(redirect_params.containsKey("type") && redirect_params.containsKey("value")) {
+                    this.redirect = new RedirectData((String) redirect_params.get("type"), (String) redirect_params.get("value"));
+                }
             }
         }
     }
@@ -166,6 +168,6 @@ public class SearchResponse {
     }
 
     public RedirectData getRedirect() {
-        return redirect.getRedirectData();
+        return this.redirect;
     }
 }
