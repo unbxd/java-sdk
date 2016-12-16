@@ -7,6 +7,11 @@ public class RedirectData {
     private String type; // URL Rediect or Navigation
     private String value; // URL or Navigation Node Id
 
+    public RedirectData(String type, String value) {
+        this.type = type;
+        this.value = value;
+    }
+
     public String getType() {
         return type;
     }
