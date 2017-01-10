@@ -16,6 +16,7 @@ public class Stat {
     private int _count;
     private double _sum;
     private double _mean;
+    private Map<String, Object> facets;
 
     protected Stat(Map<String, Object> params){
         this._min = ((Number)params.get("min")).doubleValue();
@@ -23,6 +24,7 @@ public class Stat {
         this._count = ((Number)params.get("count")).intValue();
         this._sum = ((Number)params.get("sum")).doubleValue();
         this._mean = ((Number)params.get("mean")).doubleValue();
+        this.facets = (Map<String, Object>) params.get("facets");
     }
 
     public int getCount(){
@@ -45,4 +47,7 @@ public class Stat {
         return this._mean;
     }
 
+    public Map<String, Object> getFacets() {
+        return facets;
+    }
 }
