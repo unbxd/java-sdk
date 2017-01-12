@@ -50,6 +50,7 @@ public class SearchClient {
     private int pageNo;
     private int pageSize;
     private  Map<String, String> extraParams;
+    private Map<String, List<String>> multiQueryParams;
 
 
     protected SearchClient(String siteKey, String apiKey, boolean secure) {
@@ -64,6 +65,7 @@ public class SearchClient {
         this.extraParams = new HashMap<String, String>();
         this.pageNo = 0;
         this.pageSize = 10;
+        this.multiQueryParams = new HashMap<String, List<String>>();
     }
 
     private String getSearchUrl(){
@@ -208,6 +210,24 @@ public class SearchClient {
         return this;
     }
 
+    /**
+     * Set multiple query parameters
+     * @param key
+     * @param values
+     * @return
+     */
+    public SearchClient setMultiParams(String key, List<String> values) {
+        if(multiQueryParams.containsKey(key)) {
+            List<String> previousValues = this.multiQueryParams.get(key);
+            previousValues.addAll(values);
+            this.multiQueryParams.put(key,previousValues);
+        }else{
+            this.multiQueryParams.put(key, values);
+        }
+
+        return this;
+    }
+
     private String generateUrl() throws SearchException {
         if(query != null && categoryIds != null){
             throw new SearchException("Can't set query and node id at the same time");
@@ -261,6 +281,14 @@ public class SearchClient {
                 }
             }
 
+            if (multiQueryParams != null && multiQueryParams.size() > 0) {
+                List<String> multiParamsList = formMultiQueryParams(multiQueryParams);
+
+                if(multiParamsList.size() > 0) {
+                    sb.append("&").append(StringUtils.join(multiParamsList, "&"));
+                }
+            }
+
             sb.append("&page=" + pageNo);
             sb.append("&rows=" + pageSize);
 
@@ -305,5 +333,30 @@ public class SearchClient {
             LOG.error(e.getMessage(), e);
             throw new SearchException(e);
         }
+    }
+
+    /**
+     * Form multiple query parameters
+     * @param multiQueryParams - <"facet.field", ["category", "brand"] >
+     * @return - ["facet.field=category&facet.field=brand"]
+     */
+    private ArrayList<String> formMultiQueryParams(Map<String, List<String>> multiQueryParams) {
+        ArrayList<String> multiParamsList = new ArrayList<String>();
+
+        for (String key : multiQueryParams.keySet()) {
+            StringBuilder multiQps = new StringBuilder();
+
+            for(String value : multiQueryParams.get(key)) {
+                multiQps.append(key).append("=").append(value);
+                if(multiQueryParams.get(key).indexOf(value) < (multiQueryParams.get(key).size() - 1)) {
+                    multiQps.append("&");
+                }
+            }
+            if(!multiQps.toString().isEmpty()) {
+                multiParamsList.add(multiQps.toString());
+            }
+        }
+
+        return multiParamsList;
     }
 }
