@@ -241,9 +241,7 @@ public class SearchClient {
         }
 
         if(multiQueryParams.containsKey(key)) {
-            List<String> previousValues = this.multiQueryParams.get(key);
-            previousValues.addAll(values);
-            this.multiQueryParams.put(key,previousValues);
+            this.multiQueryParams.get(key).addAll(values);
         }else{
             this.multiQueryParams.put(key, values);
         }
