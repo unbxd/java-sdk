@@ -1,5 +1,8 @@
 package com.unbxd.client.search;
 
+import org.apache.http.client.HttpClient;
+import org.apache.http.impl.client.CloseableHttpClient;
+
 /**
  * Created with IntelliJ IDEA.
  * User: sourabh
@@ -9,7 +12,7 @@ package com.unbxd.client.search;
  */
 public class SearchClientFactory {
 
-    public static SearchClient getSearchClient(String siteKey, String apiKey, boolean secure){
-        return new SearchClient(siteKey, apiKey, secure);
+    public static SearchClient getSearchClient(String siteKey, String apiKey, boolean secure, CloseableHttpClient httpClient){
+        return new SearchClient(siteKey, apiKey, secure, httpClient);
     }
 }

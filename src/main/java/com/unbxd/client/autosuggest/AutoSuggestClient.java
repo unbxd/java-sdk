@@ -5,6 +5,7 @@ import com.unbxd.client.autosuggest.exceptions.AutoSuggestException;
 import com.unbxd.client.autosuggest.response.AutoSuggestResponse;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
@@ -44,8 +45,10 @@ public class AutoSuggestClient {
     private int keywordSuggestionsCount;
     private int topQueriesCount;
 
+    private CloseableHttpClient httpClient;
 
-    protected AutoSuggestClient(String siteKey, String apiKey, boolean secure) {
+
+    protected AutoSuggestClient(String siteKey, String apiKey, boolean secure, CloseableHttpClient httpClient) {
         this.siteKey = siteKey;
         this.apiKey = apiKey;
         this.secure = secure;
@@ -54,6 +57,8 @@ public class AutoSuggestClient {
         this.popularProductsCount = -1;
         this.keywordSuggestionsCount = -1;
         this.topQueriesCount = -1;
+
+        this.httpClient = httpClient;
     }
 
     private String getAutoSuggestUrl(){
@@ -155,13 +160,10 @@ public class AutoSuggestClient {
      * @throws AutoSuggestException
      */
     public AutoSuggestResponse execute() throws AutoSuggestException {
-        CloseableHttpClient httpClient = HttpClients.custom().setConnectionManager(ConnectionManager.getConnectionManager()).build();
-        try{
-            String url = this.generateUrl();
+        String url = this.generateUrl();
 
-            HttpGet get = new HttpGet(url);
-            HttpResponse response = httpClient.execute(get);
-
+        HttpGet get = new HttpGet(url);
+        try (CloseableHttpResponse response = httpClient.execute(get)) {
             if(response.getStatusLine().getStatusCode() == 200){
                 Map<String, Object> responseObject = new ObjectMapper().readValue(new InputStreamReader(response.getEntity().getContent()), Map.class);
                 return new AutoSuggestResponse(responseObject);
@@ -178,16 +180,7 @@ public class AutoSuggestClient {
                 LOG.error(responseText);
                 throw new AutoSuggestException(responseText);
             }
-        } catch (JsonParseException e) {
-            LOG.error(e.getMessage(), e);
-            throw new AutoSuggestException(e);
-        } catch (JsonMappingException e) {
-            LOG.error(e.getMessage(), e);
-            throw new AutoSuggestException(e);
-        } catch (ClientProtocolException e) {
-            LOG.error(e.getMessage(), e);
-            throw new AutoSuggestException(e);
-        } catch (IOException e) {
+        } catch (Exception e) {
             LOG.error(e.getMessage(), e);
             throw new AutoSuggestException(e);
         }

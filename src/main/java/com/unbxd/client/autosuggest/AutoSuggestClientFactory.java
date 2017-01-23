@@ -1,5 +1,8 @@
 package com.unbxd.client.autosuggest;
 
+import org.apache.http.client.HttpClient;
+import org.apache.http.impl.client.CloseableHttpClient;
+
 /**
  * Created with IntelliJ IDEA.
  * User: sourabh
@@ -9,7 +12,7 @@ package com.unbxd.client.autosuggest;
  */
 public class AutoSuggestClientFactory {
 
-    public static AutoSuggestClient getAutoSuggestClient(String siteKey, String apiKey, boolean secure){
-        return new AutoSuggestClient(siteKey, apiKey, secure);
+    public static AutoSuggestClient getAutoSuggestClient(String siteKey, String apiKey, boolean secure, CloseableHttpClient httpClient){
+        return new AutoSuggestClient(siteKey, apiKey, secure, httpClient);
     }
 }

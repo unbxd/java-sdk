@@ -5,6 +5,7 @@ import com.unbxd.client.recommendations.exceptions.RecommendationsException;
 import com.unbxd.client.recommendations.response.RecommendationResponse;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
@@ -59,10 +60,13 @@ public class RecommendationsClient {
     private String category;
     private String brand;
 
-    public RecommendationsClient(String siteKey, String apiKey, boolean secure) {
+    private CloseableHttpClient httpClient;
+
+    public RecommendationsClient(String siteKey, String apiKey, boolean secure, CloseableHttpClient httpClient) {
         this.siteKey = siteKey;
         this.apiKey = apiKey;
         this.secure = secure;
+        this.httpClient = httpClient;
     }
 
     private String getRecommendationUrl(){
@@ -268,13 +272,11 @@ public class RecommendationsClient {
      * @throws RecommendationsException
      */
     public RecommendationResponse execute() throws RecommendationsException {
-        CloseableHttpClient httpClient = HttpClients.custom().setConnectionManager(ConnectionManager.getConnectionManager()).build();
-        try{
-            String url = this.generateUrl();
 
-            HttpGet get = new HttpGet(url);
-            HttpResponse response = httpClient.execute(get);
+        String url = this.generateUrl();
 
+        HttpGet get = new HttpGet(url);
+        try (CloseableHttpResponse response = httpClient.execute(get)) {
             if(response.getStatusLine().getStatusCode() == 200){
                 Map<String, Object> responseObject = new ObjectMapper().readValue(new InputStreamReader(response.getEntity().getContent()), Map.class);
                 return new RecommendationResponse(responseObject);
@@ -291,16 +293,7 @@ public class RecommendationsClient {
                 LOG.error(responseText);
                 throw new RecommendationsException(responseText);
             }
-        } catch (JsonParseException e) {
-            LOG.error(e.getMessage(), e);
-            throw new RecommendationsException(e);
-        } catch (JsonMappingException e) {
-            LOG.error(e.getMessage(), e);
-            throw new RecommendationsException(e);
-        } catch (ClientProtocolException e) {
-            LOG.error(e.getMessage(), e);
-            throw new RecommendationsException(e);
-        } catch (IOException e) {
+        } catch (Exception e) {
             LOG.error(e.getMessage(), e);
             throw new RecommendationsException(e);
         }
