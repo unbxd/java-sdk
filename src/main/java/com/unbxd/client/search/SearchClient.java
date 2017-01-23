@@ -218,9 +218,7 @@ public class SearchClient {
      */
     public SearchClient setMultiParams(String key, List<String> values) {
         if(multiQueryParams.containsKey(key)) {
-            List<String> previousValues = this.multiQueryParams.get(key);
-            previousValues.addAll(values);
-            this.multiQueryParams.put(key,previousValues);
+            this.multiQueryParams.get(key).addAll(values);
         }else{
             this.multiQueryParams.put(key, values);
         }
@@ -306,7 +304,11 @@ public class SearchClient {
      * @throws SearchException
      */
     public SearchResponse execute() throws SearchException {
-        CloseableHttpClient httpClient = HttpClients.custom().setConnectionManager(ConnectionManager.getConnectionManager()).build();
+        CloseableHttpClient httpClient = HttpClients.custom()
+                .setDefaultRequestConfig(ConnectionManager.getRequestConfig())
+                .setConnectionManager(ConnectionManager.getConnectionManager())
+                .build();
+
         try{
             String url = this.generateUrl();
 

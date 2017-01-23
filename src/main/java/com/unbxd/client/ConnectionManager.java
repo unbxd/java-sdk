@@ -1,5 +1,6 @@
 package com.unbxd.client;
 
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.config.Registry;
 import org.apache.http.config.RegistryBuilder;
 import org.apache.http.conn.socket.ConnectionSocketFactory;
@@ -35,5 +36,14 @@ public class ConnectionManager {
         }
 
         return __connectionManager;
+    }
+
+    public static RequestConfig getRequestConfig() {
+        RequestConfig defaultConfig = RequestConfig.custom()
+                .setConnectTimeout(30 * 1000)
+                .setSocketTimeout(60 * 1000)
+                .build();
+
+        return defaultConfig;
     }
 }
