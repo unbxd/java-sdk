@@ -1,14 +1,11 @@
 package com.unbxd.client.recommendations;
 
-import com.unbxd.client.ConnectionManager;
 import com.unbxd.client.recommendations.exceptions.RecommendationsException;
 import com.unbxd.client.recommendations.response.RecommendationResponse;
-import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;

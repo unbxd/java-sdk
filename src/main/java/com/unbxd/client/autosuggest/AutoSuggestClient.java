@@ -1,14 +1,11 @@
 package com.unbxd.client.autosuggest;
 
-import com.unbxd.client.ConnectionManager;
 import com.unbxd.client.autosuggest.exceptions.AutoSuggestException;
 import com.unbxd.client.autosuggest.response.AutoSuggestResponse;
-import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
