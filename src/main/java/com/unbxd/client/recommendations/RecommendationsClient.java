@@ -276,7 +276,9 @@ public class RecommendationsClient {
         String url = this.generateUrl();
 
         HttpGet get = new HttpGet(url);
-        try (CloseableHttpResponse response = httpClient.execute(get)) {
+        CloseableHttpResponse response = null;
+        try {
+            response = httpClient.execute(get);
             if(response.getStatusLine().getStatusCode() == 200){
                 Map<String, Object> responseObject = new ObjectMapper().readValue(new InputStreamReader(response.getEntity().getContent()), Map.class);
                 return new RecommendationResponse(responseObject);
@@ -293,9 +295,26 @@ public class RecommendationsClient {
                 LOG.error(responseText);
                 throw new RecommendationsException(responseText);
             }
-        } catch (Exception e) {
+        } catch (JsonParseException e) {
             LOG.error(e.getMessage(), e);
             throw new RecommendationsException(e);
+        } catch (JsonMappingException e) {
+            LOG.error(e.getMessage(), e);
+            throw new RecommendationsException(e);
+        } catch (ClientProtocolException e) {
+            LOG.error(e.getMessage(), e);
+            throw new RecommendationsException(e);
+        } catch (IOException e) {
+            LOG.error(e.getMessage(), e);
+            throw new RecommendationsException(e);
+        } finally {
+            if (response != null) {
+                try {
+                    response.close();
+                } catch (IOException e) {
+                    LOG.error(e.getMessage(), e);
+                }
+            }
         }
     }
 

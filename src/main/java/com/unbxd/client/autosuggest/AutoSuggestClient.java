@@ -163,7 +163,9 @@ public class AutoSuggestClient {
         String url = this.generateUrl();
 
         HttpGet get = new HttpGet(url);
-        try (CloseableHttpResponse response = httpClient.execute(get)) {
+        CloseableHttpResponse response = null;
+        try {
+            response = httpClient.execute(get);
             if(response.getStatusLine().getStatusCode() == 200){
                 Map<String, Object> responseObject = new ObjectMapper().readValue(new InputStreamReader(response.getEntity().getContent()), Map.class);
                 return new AutoSuggestResponse(responseObject);
@@ -180,9 +182,26 @@ public class AutoSuggestClient {
                 LOG.error(responseText);
                 throw new AutoSuggestException(responseText);
             }
-        } catch (Exception e) {
+        } catch (JsonParseException e) {
             LOG.error(e.getMessage(), e);
             throw new AutoSuggestException(e);
+        } catch (JsonMappingException e) {
+            LOG.error(e.getMessage(), e);
+            throw new AutoSuggestException(e);
+        } catch (ClientProtocolException e) {
+            LOG.error(e.getMessage(), e);
+            throw new AutoSuggestException(e);
+        } catch (IOException e) {
+            LOG.error(e.getMessage(), e);
+            throw new AutoSuggestException(e);
+        } finally {
+            if (response != null) {
+                try {
+                    response.close();
+                } catch (IOException e) {
+                    LOG.error(e.getMessage(), e);
+                }
+            }
         }
     }
 

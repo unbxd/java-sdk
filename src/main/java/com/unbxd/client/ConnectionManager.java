@@ -27,8 +27,6 @@ public class ConnectionManager {
 
     private static final int DEFAULT_MAX_HTTP_CONNECTIONS = 10;
     private static final int MAX_TOTAL_HTTP = 20;
-    private static final int DEFAULT_HTTPS_PORT = 443;
-    private static final int DEFAULT_HTTP_PORT = 80;
 
     private static PoolingHttpClientConnectionManager __connectionManager;
 
@@ -46,40 +44,10 @@ public class ConnectionManager {
 
                     __connectionManager.setMaxTotal(MAX_TOTAL_HTTP);
                     __connectionManager.setDefaultMaxPerRoute(DEFAULT_MAX_HTTP_CONNECTIONS);
-
-                    setMaxPerRoute();
-
-                    __connectionManager.setDefaultMaxPerRoute(50);
-                    __connectionManager.setMaxTotal(100);
                 }
             }
         }
 
         return __connectionManager;
-    }
-
-    private static void setMaxPerRoute() {
-        // TODO handle https
-        boolean skipMaxPerRoute = false;
-        URI uri = null;
-        try {
-            uri = new URI("http://search.unbxdapi.com");
-        } catch (URISyntaxException e) {
-            // TODO log error
-            skipMaxPerRoute = true;
-        }
-
-        if (!skipMaxPerRoute) {
-            int port = uri.getPort();
-            if (port == -1) {
-                if ("https".equalsIgnoreCase(uri.getScheme())) {
-                    port = DEFAULT_HTTPS_PORT;
-                } else {
-                    port = DEFAULT_HTTP_PORT;
-                }
-            }
-            HttpHost host = new HttpHost(uri.getHost(), port);
-            __connectionManager.setMaxPerRoute(new HttpRoute(host, null, "https".equalsIgnoreCase(uri.getScheme())), 10);
-        }
     }
 }
