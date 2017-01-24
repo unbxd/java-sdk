@@ -1,5 +1,8 @@
 package com.unbxd.client.recommendations;
 
+import org.apache.http.client.HttpClient;
+import org.apache.http.impl.client.CloseableHttpClient;
+
 /**
  * Created with IntelliJ IDEA.
  * User: sourabh
@@ -9,7 +12,7 @@ package com.unbxd.client.recommendations;
  */
 public class RecommendationsClientFactory {
 
-    public static RecommendationsClient getRecommendationsClient(String siteKey, String apiKey, boolean secure){
-        return new RecommendationsClient(siteKey, apiKey, secure);
+    public static RecommendationsClient getRecommendationsClient(String siteKey, String apiKey, boolean secure, CloseableHttpClient httpClient){
+        return new RecommendationsClient(siteKey, apiKey, secure, httpClient);
     }
 }

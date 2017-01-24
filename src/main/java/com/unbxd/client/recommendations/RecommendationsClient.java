@@ -1,13 +1,11 @@
 package com.unbxd.client.recommendations;
 
-import com.unbxd.client.ConnectionManager;
 import com.unbxd.client.recommendations.exceptions.RecommendationsException;
 import com.unbxd.client.recommendations.response.RecommendationResponse;
-import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
 import org.apache.log4j.Logger;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
@@ -59,10 +57,13 @@ public class RecommendationsClient {
     private String category;
     private String brand;
 
-    public RecommendationsClient(String siteKey, String apiKey, boolean secure) {
+    private CloseableHttpClient httpClient;
+
+    public RecommendationsClient(String siteKey, String apiKey, boolean secure, CloseableHttpClient httpClient) {
         this.siteKey = siteKey;
         this.apiKey = apiKey;
         this.secure = secure;
+        this.httpClient = httpClient;
     }
 
     private String getRecommendationUrl(){
@@ -268,13 +269,13 @@ public class RecommendationsClient {
      * @throws RecommendationsException
      */
     public RecommendationResponse execute() throws RecommendationsException {
-        CloseableHttpClient httpClient = HttpClients.custom().setConnectionManager(ConnectionManager.getConnectionManager()).build();
-        try{
-            String url = this.generateUrl();
 
-            HttpGet get = new HttpGet(url);
-            HttpResponse response = httpClient.execute(get);
+        String url = this.generateUrl();
 
+        HttpGet get = new HttpGet(url);
+        CloseableHttpResponse response = null;
+        try {
+            response = httpClient.execute(get);
             if(response.getStatusLine().getStatusCode() == 200){
                 Map<String, Object> responseObject = new ObjectMapper().readValue(new InputStreamReader(response.getEntity().getContent()), Map.class);
                 return new RecommendationResponse(responseObject);
@@ -303,6 +304,14 @@ public class RecommendationsClient {
         } catch (IOException e) {
             LOG.error(e.getMessage(), e);
             throw new RecommendationsException(e);
+        } finally {
+            if (response != null) {
+                try {
+                    response.close();
+                } catch (IOException e) {
+                    LOG.error(e.getMessage(), e);
+                }
+            }
         }
     }
 
